@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Trilha da Aprovação - TJDFT</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --text: #ffffff;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e1b4b 0%, #090d16 75%);
+      color: var(--text);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #f43f5e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .sub {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .panel {
+      background: rgba(19, 27, 46, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+    }
+
+    .progress-bar {
+      background: #1e293b;
+      height: 16px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #06b6d4, #6366f1, #10b981);
+      height: 100%;
+      width: 0%;
+      transition: width 0.35s ease;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+    }
+
+    .btn-save { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .btn-load { background: #334155; }
+    .btn-reset { background: #dc2626; }
+
+    .board-grid {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+      gap: 8px;
+      margin-bottom: 50px;
+    }
+
+    .tile {
+      border-radius: 14px;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      cursor: pointer;
+      position: relative;
+      border: 2px solid var(--theme-border, #334155);
+      background-color: var(--theme-bg, #131b2e);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.15s;
+    }
+
+    .tile:active {
+      transform: scale(0.92);
+    }
+
+    .tile-icon {
+      font-size: 1.4rem;
+      margin-bottom: 2px;
+    }
+
+    .tile-number {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .tile-tag {
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 90%;
+    }
+
+    /* Temas de Cores */
+    .cat-pt { --theme-border: #f97316; --theme-bg: rgba(249, 115, 22, 0.18); }
+    .cat-leg { --theme-border: #eab308; --theme-bg: rgba(234, 179, 8, 0.18); }
+    .cat-const { --theme-border: #06b6d4; --theme-bg: rgba(6, 182, 212, 0.18); }
+    .cat-adm { --theme-border: #a855f7; --theme-bg: rgba(168, 85, 247, 0.18); }
+    .cat-civ { --theme-border: #10b981; --theme-bg: rgba(16, 185, 129, 0.18); }
+    .cat-proc-civ { --theme-border: #6366f1; --theme-bg: rgba(99, 102, 241, 0.18); }
+    .cat-pen { --theme-border: #ef4444; --theme-bg: rgba(239, 68, 68, 0.18); }
+    .cat-proc-pen { --theme-border: #f43f5e; --theme-bg: rgba(244, 63, 94, 0.18); }
+    .cat-star { --theme-border: #ffd700; --theme-bg: rgba(255, 215, 0, 0.25); box-shadow: 0 0 12px rgba(255,215,0,0.5); }
+
+    .tile.concluido {
+      background: linear-gradient(135deg, rgba(16,185,129,0.4), rgba(5,150,105,0.55)) !important;
+      border-color: #10b981 !important;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.7) !important;
+    }
+
+    .tile.concluido::after {
+      content: "✓";
+      position: absolute;
+      top: 3px;
+      right: 5px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: #34d399;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+
+    .modal-card {
+      background: #1e293b;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      max-width: 520px;
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-header-icon { font-size: 2.2rem; }
+
+    .modal-topic {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      background: #0f172a;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border-left: 3px solid #38bdf8;
+    }
+
+    .quiz-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quiz-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .quiz-prompt {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      color: #f1f5f9;
+      font-weight: 500;
+      min-height: 65px;
+      white-space: pre-line;
+    }
+
+    .quiz-options {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-opt {
+      flex: 1;
+      padding: 11px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      border: 2px solid transparent;
+      border-radius: 8px;
+    }
+
+    .btn-opt-certo { background: #1e3a8a; }
+    .btn-opt-errado { background: #831843; }
+
+    .btn-correct { background: #10b981 !important; border-color: #34d399 !important; }
+    .btn-incorrect { background: #ef4444 !important; border-color: #f87171 !important; }
+
+    .quiz-feedback {
+      display: none;
+      font-size: 0.83rem;
+      padding: 10px;
+      border-radius: 8px;
+      line-height: 1.4;
+    }
+
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.success { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #a7f3d0; }
+    .quiz-feedback.danger { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fecaca; }
+
+    .nav-btn {
+      background: #334155;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>TRILHA DA POSSE TJDFT</h1>
+    <p class="sub">100 Casas • Baterias Cebraspe • Rumo à Nomeação ⚖️✨</p>
+
+    <div class="panel">
+      <div class="progress-bar">
+        <div id="bar" class="progress-bar-fill"></div>
+      </div>
+      <div class="stats">
+        <span id="txtCasas">0 / 100 Casas</span>
+        <span id="txtPct">0% Concluído</span>
+      </div>
+      <div class="actions">
+        <button class="btn-save" id="btnSalvar">💾 Salvar</button>
+        <button class="btn-load" id="btnCarregar">📂 Carregar</button>
+        <button class="btn-reset" id="btnResetar">↺ Resetar</button>
+        <input type="file" id="inputUpload" style="display:none;" accept=".json" />
+      </div>
+    </div>
+  </header>
+
+  <main id="board" class="board-grid"></main>
+
+  <div id="modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div id="modalIcon" class="modal-header-icon"></div>
+        <div>
+          <h2 id="modalNum" style="font-size:1.2rem;"></h2>
+          <p id="modalDisc" style="font-size:0.8rem; font-weight:700; color:#38bdf8; text-transform:uppercase;"></p>
+        </div>
+      </div>
+
+      <div id="modalTopic" class="modal-topic"></div>
+
+      <div class="quiz-box">
+        <div class="quiz-nav">
+          <button id="btnPrevQ" class="nav-btn">◀ Anterior</button>
+          <span id="quizCounter">Questão 1 / 10</span>
+          <button id="btnNextQ" class="nav-btn">Próxima ▶</button>
+        </div>
+
+        <div id="quizPrompt" class="quiz-prompt"></div>
+
+        <div class="quiz-options">
+          <button id="btnCerto" class="btn-opt btn-opt-certo">CERTO</button>
+          <button id="btnErrado" class="btn-opt btn-opt-errado">ERRADO</button>
+        </div>
+
+        <div id="quizFeedback" class="quiz-feedback"></div>
+      </div>
+
+      <div style="display:flex; gap:8px; justify-content:space-between; align-items:center; margin-top:8px;">
+        <span id="scoreText" style="font-size:0.8rem; font-weight:700; color:#94a3b8;">Desempenho: 0/10</span>
+        <div style="display:flex; gap:8px;">
+          <button id="btnAction" style="background:#10b981; font-size:0.85rem; padding:9px 14px;">Marcar Feito</button>
+          <button id="btnClose" style="background:#475569; font-size:0.85rem; padding:9px 14px;">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const boardData = [
+      { id: 1, c: "cat-pt", i: "📖", d: "Português", t: "Construção do texto, sentido e gêneros textuais" },
+      { id: 2, c: "cat-pt", i: "🔍", d: "Português", t: "Interpretação, organização interna e semântica" },
+      { id: 3, c: "cat-pt", i: "📓", d: "Português", t: "Morfologia e reconhecimento das classes de palavras" },
+      { id: 4, c: "cat-pt", i: "⏳", d: "Português", t: "Emprego de tempos e modos verbais" },
+      { id: 5, c: "cat-pt", i: "✒️", d: "Português", t: "Processos de formação de palavras e flexão nominal e verbal" },
+      { id: 6, c: "cat-pt", i: "📝", d: "Português", t: "Sintaxe: frase, oração, período e termos da oração" },
+      { id: 7, c: "cat-pt", i: "🔗", d: "Português", t: "Processos sintáticos de coordenação e subordinação" },
+      { id: 8, c: "cat-pt", i: "⚖️", d: "Português", t: "Concordância nominal e concordância verbal" },
+      { id: 9, c: "cat-pt", i: "🎯", d: "Português", t: "Transitividade e regência nominal e verbal" },
+      { id: 10, c: "cat-pt", i: "📌", d: "Português", t: "Colocação pronominal e mecanismos de coesão textual" },
+      { id: 11, c: "cat-pt", i: "✍️", d: "Português", t: "Ortografia oficial, acentuação gráfica e crase" },
+      { id: 12, c: "cat-pt", i: "💬", d: "Português", t: "Pontuação, reescrita de frases e variação linguística" },
+
+      { id: 13, c: "cat-leg", i: "🏛️", d: "Ética", t: "Ética, moral, princípios, valores, cidadania e função pública" },
+      { id: 14, c: "cat-leg", i: "📜", d: "Ética", t: "Lei 8.112/1990: regime disciplinar, deveres, proibições e penalidades" },
+      { id: 15, c: "cat-leg", i: "⚖️", d: "Ética", t: "Lei 8.429/1992: disposições gerais e atos de improbidade" },
+      { id: 16, c: "cat-leg", i: "🛡️", d: "Ética", t: "Código de Ética do TJDFT (Resolução 9/2019 e Portaria 76/2020)" },
+      { id: 17, c: "cat-leg", i: "🏛️", d: "Regimento", t: "Portaria GPR 354/2016 e estrutura organizacional do TJDFT" },
+      { id: 18, c: "cat-leg", i: "🧑‍⚖️", d: "Regimento", t: "Funcionamento dos órgãos julgadores e sessões do Tribunal" },
+      { id: 19, c: "cat-leg", i: "📜", d: "Org. Judiciária", t: "Lei 11.697/2008: competência dos órgãos judiciais do DF" },
+      { id: 20, c: "cat-leg", i: "📂", d: "Org. Judiciária", t: "Lei 11.697/2008: serviços auxiliares e ofícios de justiça" },
+      { id: 21, c: "cat-leg", i: "📑", d: "Corregedoria", t: "Provimento Geral aplicado aos Juízes e Ofícios (DJe 10/10/2014)" },
+      { id: 22, c: "cat-leg", i: "📋", d: "Corregedoria", t: "Provimentos da Corregedoria nº 07/2010 e nº 03/2011" },
+      { id: 23, c: "cat-leg", i: "💻", d: "PJe", t: "Provimento Judicial Aplicado ao Processo Judicial Eletrônico (PJe)" },
+
+      { id: 24, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 1: Bateria de Questões de Língua Portuguesa" },
+      { id: 25, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 2: Questões de Legislação do DF e Ética" },
+      { id: 26, c: "cat-star", i: "🏆", d: "Desafio", t: "SIMULADO 1: Módulo de Conhecimentos Básicos Completo" },
+
+      { id: 27, c: "cat-const", i: "📜", d: "Constitucional", t: "Constituição: conceito, elementos, classificação e aplicabilidade" },
+      { id: 28, c: "cat-const", i: "🇧🇷", d: "Constitucional", t: "Poder Constituinte originário/derivado e Princípios Fundamentais" },
+      { id: 29, c: "cat-const", i: "🛡️", d: "Constitucional", t: "Direitos e garantias fundamentais: individuais e coletivos (art. 5º)" },
+      { id: 30, c: "cat-const", i: "🗳️", d: "Constitucional", t: "Direitos sociais, nacionalidade e direitos políticos" },
+      { id: 31, c: "cat-const", i: "🗺️", d: "Constitucional", t: "Organização do Estado: competências federativas e intervenção" },
+      { id: 32, c: "cat-const", i: "🏛️", d: "Constitucional", t: "Poder Legislativo: processo legislativo, CPIs e fiscalização contábil" },
+      { id: 33, c: "cat-const", i: "👔", d: "Constitucional", t: "Poder Executivo: atribuições presidenciais e crimes de responsabilidade" },
+      { id: 34, c: "cat-const", i: "⚖️", d: "Constitucional", t: "Poder Judiciário: órgãos de cúpula, competências e CNJ" },
+      { id: 35, c: "cat-const", i: "🛡️", d: "Constitucional", t: "Funções Essenciais à Justiça: Ministério Público, Advocacia e DPU" },
+      { id: 36, c: "cat-const", i: "🎯", d: "Constitucional", t: "Controle de Constitucionalidade: sistemas, ADI, ADC, ADPF e ADO" },
+      { id: 37, c: "cat-const", i: "📜", d: "Constitucional", t: "Sistema Tributário, Ordem Social e Ações Constitucionais (MS, HC, HD, MI)" },
+
+      { id: 38, c: "cat-adm", i: "🏛️", d: "Administrativo", t: "Estado, órgãos públicos, Administração direta/indireta e princípios" },
+      { id: 39, c: "cat-adm", i: "👔", d: "Administrativo", t: "Agentes públicos e regime dos servidores civis (Lei 8.112/1990)" },
+      { id: 40, c: "cat-adm", i: "📑", d: "Administrativo", t: "Processo Administrativo (Lei Federal 9.784/99 e Lei DF 2.834/01)" },
+      { id: 41, c: "cat-adm", i: "⚙️", d: "Administrativo", t: "Poderes administrativos e Atos: atributos, requisitos e revogação" },
+      { id: 42, c: "cat-adm", i: "🏢", d: "Administrativo", t: "Serviços públicos, bens públicos e intervenção na propriedade" },
+      { id: 43, c: "cat-adm", i: "🛡️", d: "Administrativo", t: "Controle da Administração e Responsabilidade Civil do Estado" },
+      { id: 44, c: "cat-adm", i: "📜", d: "Administrativo", t: "Licitações e Contratos Administrativos (Nova Lei 14.133/2021)" },
+      { id: 45, c: "cat-adm", i: "🤝", d: "Administrativo", t: "Parcerias Público-Privadas (Lei Federal 11.079/2004)" },
+      { id: 46, c: "cat-adm", i: "⚖️", d: "Administrativo", t: "Lei Anticorrupção (12.846/2013) e LINDB no Direito Público" },
+      { id: 47, c: "cat-adm", i: "♿", d: "Administrativo", t: "Estatuto da Pessoa com Deficiência (Lei 13.146/2015)" },
+
+      { id: 48, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 3: Simulado Direito Constitucional + Administrativo" },
+
+      { id: 49, c: "cat-civ", i: "👶", d: "Direito Civil", t: "LINDB e Pessoas naturais: personalidade, capacidade e ausência" },
+      { id: 50, c: "cat-civ", i: "🏢", d: "Direito Civil", t: "Pessoas jurídicas, domicílio e classificação dos bens" },
+      { id: 51, c: "cat-civ", i: "✍️", d: "Direito Civil", t: "Fato e Negócio Jurídico: defeitos, nulidades, prescrição e decadência" },
+      { id: 52, c: "cat-civ", i: "📜", d: "Direito Civil", t: "Teoria Geral das Obrigações: espécies, transmissão e extinção" },
+      { id: 53, c: "cat-civ", i: "📑", d: "Direito Civil", t: "Teoria Geral dos Contratos e Contratos em Espécie" },
+      { id: 54, c: "cat-civ", i: "⚖️", d: "Direito Civil", t: "Atos unilaterais, títulos de crédito e responsabilidade civil" },
+      { id: 55, c: "cat-civ", i: "💼", d: "Direito Civil", t: "Direito de Empresa: empresário individual, sociedades e estabelecimento" },
+      { id: 56, c: "cat-civ", i: "🔑", d: "Direito Civil", t: "Posse e Direitos Reais: propriedade, usufruto e direitos de garantia" },
+      { id: 57, c: "cat-civ", i: "💍", d: "Direito Civil", t: "Direito de Família: casamento, regime de bens, alimentos e guarda" },
+      { id: 58, c: "cat-civ", i: "📜", d: "Direito Civil", t: "Tutela, curatela, tomada de decisão apoiada e Sucessões" },
+
+      { id: 59, c: "cat-civ", i: "⚖️", d: "Leis Civis", t: "Código de Defesa do Consumidor (Lei 8.078/1990)" },
+      { id: 60, c: "cat-civ", i: "🔑", d: "Leis Civis", t: "Lei do Inquilinato (8.245/1991) e Alienação Fiduciária de Imóveis" },
+      { id: 61, c: "cat-civ", i: "👶", d: "Leis Civis", t: "ECA (aspectos cíveis): convivência familiar, guarda, tutela e adoção" },
+      { id: 62, c: "cat-civ", i: "🔐", d: "Leis Civis", t: "Lei Geral de Proteção de Dados Pessoais (LGPD - 13.709/2018)" },
+      { id: 63, c: "cat-civ", i: "🗂️", d: "Leis Civis", t: "Registros Públicos (Lei 6.015/1973) e Provimentos CNJ correlatos" },
+      { id: 64, c: "cat-civ", i: "🏛️", d: "Leis Civis", t: "Estatuto da Cidade (Lei 10.257/2001) e Parcelamento do Solo Urbano" },
+      { id: 65, c: "cat-civ", i: "📜", d: "Leis Civis", t: "Estatuto do Idoso, Bem de Família e Lei de Liberdade Econômica" },
+
+      { id: 66, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 4: Simulado Completo de Direito Civil e Leis Especiais" },
+
+      { id: 67, c: "cat-proc-civ", i: "⚖️", d: "Processo Civil", t: "Normas fundamentais do CPC, jurisdição, ação e competência" },
+      { id: 68, c: "cat-proc-civ", i: "👥", d: "Processo Civil", t: "Partes, procuradores, despesas, gratuidade e intervenção de terceiros" },
+      { id: 69, c: "cat-proc-civ", i: "🧑‍⚖️", d: "Processo Civil", t: "Juiz: poderes, deveres, impedimentos, suspeição e auxiliares da justiça" },
+      { id: 70, c: "cat-proc-civ", i: "📬", d: "Processo Civil", t: "Atos processuais, prazos, citações, intimações e nulidades" },
+      { id: 71, c: "cat-proc-civ", i: "⚡", d: "Processo Civil", t: "Tutelas provisórias de urgência (antecipada/cautelar) e de evidência" },
+      { id: 72, c: "cat-proc-civ", i: "📑", d: "Processo Civil", t: "Procedimento Comum: petição inicial, contestação e revelia" },
+      { id: 73, c: "cat-proc-civ", i: "🔍", d: "Processo Civil", t: "Saneamento, julgamento conforme o estado do processo e Provas" },
+      { id: 74, c: "cat-proc-civ", i: "🗣️", d: "Processo Civil", t: "Audiência de instrução e julgamento, Sentença e Coisa Julgada" },
+      { id: 75, c: "cat-proc-civ", i: "📤", d: "Processo Civil", t: "Teoria geral dos recursos: Apelação, Agravo de Instrumento e EDcl" },
+      { id: 76, c: "cat-proc-civ", i: "📚", d: "Processo Civil", t: "Precedentes obrigatórios, IRDR, IAC, Reclamação e Ação Rescisória" },
+      { id: 77, c: "cat-proc-civ", i: "📜", d: "Processo Civil", t: "Processo de Execução, títulos executivos e Cumprimento de Sentença" },
+
+      { id: 78, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 5: Bateria Extensiva de Processo Civil" },
+
+      { id: 79, c: "cat-pen", i: "⚖️", d: "Direito Penal", t: "Princípios penais e aplicação da lei penal no tempo e no espaço" },
+      { id: 80, c: "cat-pen", i: "🎯", d: "Direito Penal", t: "Teoria do Crime: conduta, resultado, tipicidade, dolo, culpa e tentativa" },
+      { id: 81, c: "cat-pen", i: "🧠", d: "Direito Penal", t: "Excludentes de ilicitude, culpabilidade e Teoria do Erro" },
+      { id: 82, c: "cat-pen", i: "⛓️", d: "Direito Penal", t: "Concurso de pessoas, Teoria das Penas, dosimetria e regimes prisionais" },
+      { id: 83, c: "cat-pen", i: "🛑", d: "Direito Penal", t: "Extinção da punibilidade, crimes contra a pessoa e contra o patrimônio" },
+      { id: 84, c: "cat-pen", i: "🚨", d: "Direito Penal", t: "Crimes contra a dignidade sexual, fé pública e segurança pública" },
+      { id: 85, c: "cat-pen", i: "🏛️", d: "Direito Penal", t: "Crimes contra a Administração Pública praticados por funcionários e particulares" },
+      { id: 86, c: "cat-pen", i: "👮", d: "Leis Penais", t: "Lei de Abuso de Autoridade (13.869/2019) e Lei Antidrogas (11.343/2006)" },
+      { id: 87, c: "cat-pen", i: "🛡️", d: "Leis Penais", t: "Violência Doméstica / Maria da Penha (11.340) e Crimes Hediondos (8.072)" },
+      { id: 88, c: "cat-pen", i: "💼", d: "Leis Penais", t: "Organizações Criminosas (12.850), Lavagem de Capitais e Desarmamento" },
+
+      { id: 89, c: "cat-proc-pen", i: "🔍", d: "Processo Penal", t: "Princípios processuais penais e Inquérito Policial / Persecução" },
+      { id: 90, c: "cat-proc-pen", i: "⚖️", d: "Processo Penal", t: "Ação penal pública/privada, sujeitos do processo e competência criminal" },
+      { id: 91, c: "cat-proc-pen", i: "🔬", d: "Processo Penal", t: "Cadeia de custódia da prova pericial e interceptação telefônica" },
+      { id: 92, c: "cat-proc-pen", i: "🔒", d: "Processo Penal", t: "Prisões cautelares (flagrante, temporária, preventiva) e liberdade provisória" },
+      { id: 93, c: "cat-proc-pen", i: "📑", d: "Processo Penal", t: "Procedimento comum: rito ordinário e sumário no CPP" },
+      { id: 94, c: "cat-proc-pen", i: "👥", d: "Processo Penal", t: "Procedimento especial do Tribunal do Júri (duas fases)" },
+      { id: 95, c: "cat-proc-pen", i: "📤", d: "Processo Penal", t: "Nulidades processuais penais e recursos (Apelação, RESE, Carta)" },
+      { id: 96, c: "cat-proc-pen", i: "🕊️", d: "Processo Penal", t: "Ações autônomas de impugnação: Habeas Corpus e Revisão Criminal" },
+      { id: 97, c: "cat-proc-pen", i: "🏛️", d: "Processo Penal", t: "Juizados Especiais Criminais (Lei 9.099/1995) e Execução Penal (LEP)" },
+
+      { id: 98, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 6: Simulado Penal + Processo Penal Integrados" },
+      { id: 99, c: "cat-star", i: "💎", d: "Jurisprudência", t: "CASA DA SÚMULA: Revisão Geral STF / STJ e Súmulas Vinculantes" },
+      { id: 100, c: "cat-star", i: "👑", d: "Nomeação", t: "CASA DA POSSE: Grande Simulado Final Cooperativo!" }
+    ];
+
+    boardData.forEach(item => {
+      const qList = [];
+      for (let qNum = 1; qNum <= 10; qNum++) {
+        qList.push({
+          q: `Item ${qNum}: Conteúdo de ${item.d} relativo ao tópico "${item.t}". Aguardando o cadastro das questões oficiais no arquivo da casa.`,
+          a: "C",
+          exp: `Gabarito provisório da questão ${qNum} para a Casa ${item.id}.`
+        });
+      }
+      item.questions = qList;
+      item.loaded = false;
+    });
+
+    let concluidas = JSON.parse(localStorage.getItem("trilha_tjdft_done") || "[]");
+    let currentTile = null;
+    let currentQIndex = 0;
+    let userAnswers = {};
+
+    const board = document.getElementById("board");
+    const modal = document.getElementById("modal");
+    const modalNum = document.getElementById("modalNum");
+    const modalDisc = document.getElementById("modalDisc");
+    const modalIcon = document.getElementById("modalIcon");
+    const modalTopic = document.getElementById("modalTopic");
+    const quizCounter = document.getElementById("quizCounter");
+    const quizPrompt = document.getElementById("quizPrompt");
+    const quizFeedback = document.getElementById("quizFeedback");
+    const btnCerto = document.getElementById("btnCerto");
+    const btnErrado = document.getElementById("btnErrado");
+    const btnPrevQ = document.getElementById("btnPrevQ");
+    const btnNextQ = document.getElementById("btnNextQ");
+    const scoreText = document.getElementById("scoreText");
+    const btnAction = document.getElementById("btnAction");
+    const bar = document.getElementById("bar");
+    const txtCasas = document.getElementById("txtCasas");
+    const txtPct = document.getElementById("txtPct");
+
+    function render() {
+      board.innerHTML = "";
+      boardData.forEach(item => {
+        const isDone = concluidas.includes(item.id);
+        const div = document.createElement("div");
+        div.className = `tile ${item.c} ${isDone ? "concluido" : ""}`;
+        div.innerHTML = `
+          <div class="tile-icon">${item.i}</div>
+          <div class="tile-number">${item.id}</div>
+          <div class="tile-tag">${item.d}</div>
+        `;
+        div.onclick = () => openTile(item);
+        board.appendChild(div);
+      });
+      refreshStats();
+    }
+
+    function refreshStats() {
+      const done = concluidas.length;
+      const pct = Math.round((done / boardData.length) * 100);
+      bar.style.width = pct + "%";
+      txtCasas.innerText = `${done} / ${boardData.length} Casas`;
+      txtPct.innerText = `${pct}% Concluído`;
+      localStorage.setItem("trilha_tjdft_done", JSON.stringify(concluidas));
+    }
+
+    async function openTile(item) {
+      currentTile = item;
+      currentQIndex = 0;
+
+      if (!item.loaded) {
+        try {
+          const module = await import(`./casas/casa${item.id}.js`);
+          if (module.default && module.default.questions) {
+            item.questions = module.default.questions;
+            item.loaded = true;
+          }
+        } catch (e) {
+          // Mantém as questões provisórias caso o arquivo da casa não exista
+        }
+      }
+
+      if (!userAnswers[item.id]) userAnswers[item.id] = {};
+
+      modalNum.innerText = `CASA ${item.id}`;
+      modalDisc.innerText = item.d;
+      modalIcon.innerText = item.i;
+      modalTopic.innerText = `Meta: ${item.t}`;
+
+      const isDone = concluidas.includes(item.id);
+      btnAction.innerText = isDone ? "Desmarcar" : "Concluir Casa ✨";
+      btnAction.style.background = isDone ? "#dc2626" : "#10b981";
+
+      renderQuestion();
+      modal.style.display = "flex";
+    }
+
+    function renderQuestion() {
+      const q = currentTile.questions[currentQIndex];
+      quizCounter.innerText = `Questão ${currentQIndex + 1} de ${currentTile.questions.length}`;
+      quizPrompt.innerText = q.q;
+
+      btnCerto.className = "btn-opt btn-opt-certo";
+      btnErrado.className = "btn-opt btn-opt-errado";
+      quizFeedback.className = "quiz-feedback";
+
+      const answered = userAnswers[currentTile.id][currentQIndex];
+      if (answered) {
+        showResult(answered);
+      }
+
+      updateScore();
+    }
+
+    function answer(choice) {
+      userAnswers[currentTile.id][currentQIndex] = choice;
+      showResult(choice);
+      updateScore();
+    }
+
+    function showResult(choice) {
+      const q = currentTile.questions[currentQIndex];
+      const isRight = (choice === q.a);
+
+      btnCerto.className = "btn-opt btn-opt-certo";
+      btnErrado.className = "btn-opt btn-opt-errado";
+
+      if (choice === "C") {
+        btnCerto.classList.add(isRight ? "btn-correct" : "btn-incorrect");
+      } else {
+        btnErrado.classList.add(isRight ? "btn-correct" : "btn-incorrect");
+      }
+
+      quizFeedback.className = "quiz-feedback show " + (isRight ? "success" : "danger");
+      quizFeedback.innerHTML = `<strong>${isRight ? "CORRETO! 🎉" : "INCORRETO! ⚠️"}</strong> (Gabarito: ${q.a === "C" ? "CERTO" : "ERRADO"})<br>${q.exp}`;
+    }
+
+    function updateScore() {
+      const total = currentTile.questions.length;
+      let hits = 0;
+      for (let i = 0; i < total; i++) {
+        if (userAnswers[currentTile.id][i] === currentTile.questions[i].a) {
+          hits++;
+        }
+      }
+      scoreText.innerText = `Desempenho: ${hits}/${total} Acertos`;
+    }
+
+    btnPrevQ.onclick = () => {
+      if (currentQIndex > 0) {
+        currentQIndex--;
+        renderQuestion();
+      }
+    };
+
+    btnNextQ.onclick = () => {
+      if (currentQIndex < currentTile.questions.length - 1) {
+        currentQIndex++;
+        renderQuestion();
+      }
+    };
+
+    btnCerto.onclick = () => answer("C");
+    btnErrado.onclick = () => answer("E");
+
+    btnAction.onclick = () => {
+      if (concluidas.includes(currentTile.id)) {
+        concluidas = concluidas.filter(x => x !== currentTile.id);
+      } else {
+        concluidas.push(currentTile.id);
+      }
+      modal.style.display = "none";
+      render();
+    };
+
+    document.getElementById("btnClose").onclick = () => {
+      modal.style.display = "none";
+    };
+
+    document.getElementById("btnSalvar").onclick = () => {
+      const backup = {
+        done: concluidas,
+        answers: userAnswers
+      };
+      const blob = new Blob([JSON.stringify(backup)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "trilha_tjdft_backup.json";
+      a.click();
+    };
+
+    document.getElementById("btnCarregar").onclick = () => {
+      document.getElementById("inputUpload").click();
+    };
+
+    document.getElementById("inputUpload").onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const res = JSON.parse(evt.target.result);
+          concluidas = res.done || [];
+          userAnswers = res.answers || {};
+          render();
+        } catch {
+          alert("Arquivo corrompido!");
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    document.getElementById("btnResetar").onclick = () => {
+      if (confirm("Deseja zerar as casas estudadas e respostas?")) {
+        concluidas = [];
+        userAnswers = {};
+        render();
+      }
+    };
+
+    render();
+  </script>
+</body>
+</html>
