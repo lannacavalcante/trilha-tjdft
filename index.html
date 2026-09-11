@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Trilha da Aprovação - TJDFT</title>
+  <title>Trilha da Posse TJDFT - Estratégica</title>
   <style>
     :root {
-      --bg: #090d16;
+      --bg: #0b0f19;
       --card-bg: #131b2e;
-      --text: #ffffff;
+      --text: #f8fafc;
       --text-muted: #94a3b8;
+      
+      --zona-vermelha: #ef4444;
+      --zona-amarela: #eab308;
+      --zona-verde: #10b981;
     }
 
     * {
@@ -21,9 +25,9 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #1e1b4b 0%, #090d16 75%);
+      background: radial-gradient(circle at top, #1e1b4b 0%, #0b0f19 80%);
       color: var(--text);
-      padding: 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -32,59 +36,82 @@
 
     header {
       width: 100%;
-      max-width: 900px;
-      margin-bottom: 20px;
+      max-width: 960px;
+      margin-bottom: 16px;
       text-align: center;
     }
 
     h1 {
-      font-size: 1.85rem;
+      font-size: 1.8rem;
       font-weight: 800;
-      background: linear-gradient(90deg, #38bdf8, #818cf8, #f43f5e);
+      background: linear-gradient(90deg, #ef4444, #eab308, #10b981);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 4px;
     }
 
     .sub {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #cbd5e1;
       font-weight: 500;
     }
 
     .panel {
-      background: rgba(19, 27, 46, 0.9);
+      background: rgba(19, 27, 46, 0.95);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 16px;
-      padding: 16px;
-      margin-top: 14px;
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+      padding: 14px;
+      margin-top: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
 
     .progress-bar {
       background: #1e293b;
-      height: 16px;
+      height: 14px;
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.08);
     }
 
     .progress-bar-fill {
-      background: linear-gradient(90deg, #06b6d4, #6366f1, #10b981);
+      background: linear-gradient(90deg, #ef4444, #eab308, #10b981);
       height: 100%;
       width: 0%;
       transition: width 0.35s ease;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
     }
 
     .stats {
       display: flex;
       justify-content: space-between;
       margin-top: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      margin-top: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-filter {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: #1e293b;
       color: #94a3b8;
+    }
+
+    .btn-filter.active {
+      background: #fff;
+      color: #0b0f19;
     }
 
     .actions {
@@ -92,33 +119,35 @@
       gap: 8px;
       margin-top: 12px;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     button {
       border: none;
-      border-radius: 10px;
-      padding: 9px 14px;
-      font-size: 0.82rem;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
       color: white;
     }
 
-    .btn-save { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .btn-load { background: #334155; }
+    .btn-save { background: #2563eb; }
+    .btn-load { background: #475569; }
     .btn-reset { background: #dc2626; }
+    .btn-guide { background: #059669; }
 
     .board-grid {
       width: 100%;
-      max-width: 900px;
+      max-width: 960px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
       gap: 8px;
       margin-bottom: 50px;
     }
 
     .tile {
-      border-radius: 14px;
+      border-radius: 12px;
       aspect-ratio: 1;
       display: flex;
       flex-direction: column;
@@ -127,63 +156,57 @@
       padding: 4px;
       cursor: pointer;
       position: relative;
-      border: 2px solid var(--theme-border, #334155);
-      background-color: var(--theme-bg, #131b2e);
+      background: #131b2e;
+      border: 2px solid #334155;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      transition: transform 0.15s;
+      transition: transform 0.1s;
     }
 
     .tile:active {
       transform: scale(0.92);
     }
 
-    .tile-icon {
-      font-size: 1.4rem;
-      margin-bottom: 2px;
+    .tile.zona-vermelha {
+      border-color: rgba(239, 68, 68, 0.7);
+      background: rgba(239, 68, 68, 0.12);
     }
 
-    .tile-number {
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #fff;
+    .tile.zona-amarela {
+      border-color: rgba(234, 179, 8, 0.7);
+      background: rgba(234, 179, 8, 0.12);
     }
 
-    .tile-tag {
-      font-size: 0.55rem;
-      font-weight: 700;
-      color: rgba(255,255,255,0.85);
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 90%;
+    .tile.zona-verde {
+      border-color: rgba(16, 185, 129, 0.7);
+      background: rgba(16, 185, 129, 0.12);
     }
-
-    /* Temas de Cores */
-    .cat-pt { --theme-border: #f97316; --theme-bg: rgba(249, 115, 22, 0.18); }
-    .cat-leg { --theme-border: #eab308; --theme-bg: rgba(234, 179, 8, 0.18); }
-    .cat-const { --theme-border: #06b6d4; --theme-bg: rgba(6, 182, 212, 0.18); }
-    .cat-adm { --theme-border: #a855f7; --theme-bg: rgba(168, 85, 247, 0.18); }
-    .cat-civ { --theme-border: #10b981; --theme-bg: rgba(16, 185, 129, 0.18); }
-    .cat-proc-civ { --theme-border: #6366f1; --theme-bg: rgba(99, 102, 241, 0.18); }
-    .cat-pen { --theme-border: #ef4444; --theme-bg: rgba(239, 68, 68, 0.18); }
-    .cat-proc-pen { --theme-border: #f43f5e; --theme-bg: rgba(244, 63, 94, 0.18); }
-    .cat-star { --theme-border: #ffd700; --theme-bg: rgba(255, 215, 0, 0.25); box-shadow: 0 0 12px rgba(255,215,0,0.5); }
 
     .tile.concluido {
-      background: linear-gradient(135deg, rgba(16,185,129,0.4), rgba(5,150,105,0.55)) !important;
+      background: linear-gradient(135deg, rgba(16,185,129,0.3), rgba(5,150,105,0.6)) !important;
       border-color: #10b981 !important;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.7) !important;
     }
 
     .tile.concluido::after {
       content: "✓";
       position: absolute;
-      top: 3px;
-      right: 5px;
+      top: 2px;
+      right: 4px;
       font-size: 0.75rem;
       font-weight: 900;
       color: #34d399;
+    }
+
+    .tile-icon { font-size: 1.3rem; margin-bottom: 2px; }
+    .tile-number { font-size: 0.8rem; font-weight: 800; }
+    .tile-tag {
+      font-size: 0.52rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 90%;
     }
 
     .modal-overlay {
@@ -194,17 +217,17 @@
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
       z-index: 100;
     }
 
     .modal-card {
       background: #1e293b;
       border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px;
-      max-width: 520px;
+      border-radius: 18px;
+      max-width: 540px;
       width: 100%;
-      padding: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -218,22 +241,33 @@
       gap: 12px;
     }
 
-    .modal-header-icon { font-size: 2.2rem; }
+    .badge-zona {
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .b-vermelha { background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid #ef4444; }
+    .b-amarela { background: rgba(234, 179, 8, 0.25); color: #fde047; border: 1px solid #eab308; }
+    .b-verde { background: rgba(16, 185, 129, 0.25); color: #86efac; border: 1px solid #10b981; }
 
     .modal-topic {
-      font-size: 0.82rem;
-      color: #94a3b8;
+      font-size: 0.85rem;
+      color: #cbd5e1;
       background: #0f172a;
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-radius: 8px;
-      border-left: 3px solid #38bdf8;
+      border-left: 4px solid #38bdf8;
+      line-height: 1.4;
     }
 
     .quiz-box {
       background: #0f172a;
       border: 1px solid #334155;
       border-radius: 12px;
-      padding: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -244,44 +278,42 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #1e293b;
-      padding-bottom: 8px;
-      font-size: 0.78rem;
+      padding-bottom: 6px;
+      font-size: 0.75rem;
       font-weight: 700;
       color: #38bdf8;
     }
 
     .quiz-prompt {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       line-height: 1.45;
-      color: #f1f5f9;
-      font-weight: 500;
-      min-height: 65px;
+      color: #f8fafc;
+      min-height: 60px;
       white-space: pre-line;
     }
 
     .quiz-options {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn-opt {
       flex: 1;
-      padding: 11px;
+      padding: 10px;
       font-size: 0.85rem;
       font-weight: 800;
-      border: 2px solid transparent;
       border-radius: 8px;
     }
 
-    .btn-opt-certo { background: #1e3a8a; }
-    .btn-opt-errado { background: #831843; }
+    .btn-certo { background: #1e3a8a; }
+    .btn-errado { background: #831843; }
 
-    .btn-correct { background: #10b981 !important; border-color: #34d399 !important; }
-    .btn-incorrect { background: #ef4444 !important; border-color: #f87171 !important; }
+    .btn-correct { background: #10b981 !important; }
+    .btn-incorrect { background: #ef4444 !important; }
 
     .quiz-feedback {
       display: none;
-      font-size: 0.83rem;
+      font-size: 0.82rem;
       padding: 10px;
       border-radius: 8px;
       line-height: 1.4;
@@ -291,11 +323,15 @@
     .quiz-feedback.success { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #a7f3d0; }
     .quiz-feedback.danger { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fecaca; }
 
-    .nav-btn {
-      background: #334155;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 0.75rem;
+    .plan-card {
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: #cbd5e1;
+      background: #0f172a;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -303,7 +339,7 @@
 
   <header>
     <h1>TRILHA DA POSSE TJDFT</h1>
-    <p class="sub">100 Casas • Baterias Cebraspe • Rumo à Nomeação ⚖️✨</p>
+    <p class="sub">100 Casas Temáticas • Organização por Prioridade e Relevância ⚖️✨</p>
 
     <div class="panel">
       <div class="progress-bar">
@@ -313,8 +349,17 @@
         <span id="txtCasas">0 / 100 Casas</span>
         <span id="txtPct">0% Concluído</span>
       </div>
+
+      <div class="filter-bar">
+        <button class="btn-filter active" onclick="filtrar('todas')">Todas (100)</button>
+        <button class="btn-filter" onclick="filtrar('vermelha')">🔴 Zona Vermelha (1-65)</button>
+        <button class="btn-filter" onclick="filtrar('amarela')">🟡 Zona Amarela (66-88)</button>
+        <button class="btn-filter" onclick="filtrar('verde')">🟢 Zona Verde (89-100)</button>
+      </div>
+
       <div class="actions">
-        <button class="btn-save" id="btnSalvar">💾 Salvar</button>
+        <button class="btn-guide" id="btnPlano">📋 Plano 90%</button>
+        <button class="btn-save" id="btnSalvar">💾 Backup</button>
         <button class="btn-load" id="btnCarregar">📂 Carregar</button>
         <button class="btn-reset" id="btnResetar">↺ Resetar</button>
         <input type="file" id="inputUpload" style="display:none;" accept=".json" />
@@ -324,12 +369,16 @@
 
   <main id="board" class="board-grid"></main>
 
+  <!-- Modal das Questões -->
   <div id="modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <div id="modalIcon" class="modal-header-icon"></div>
+        <div id="modalIcon" style="font-size:2rem;"></div>
         <div>
-          <h2 id="modalNum" style="font-size:1.2rem;"></h2>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <h2 id="modalNum" style="font-size:1.1rem;"></h2>
+            <span id="modalBadge" class="badge-zona"></span>
+          </div>
           <p id="modalDisc" style="font-size:0.8rem; font-weight:700; color:#38bdf8; text-transform:uppercase;"></p>
         </div>
       </div>
@@ -338,181 +387,236 @@
 
       <div class="quiz-box">
         <div class="quiz-nav">
-          <button id="btnPrevQ" class="nav-btn">◀ Anterior</button>
+          <button id="btnPrevQ" style="background:#334155; padding:4px 8px; font-size:0.75rem;">◀ Ant</button>
           <span id="quizCounter">Questão 1 / 10</span>
-          <button id="btnNextQ" class="nav-btn">Próxima ▶</button>
+          <button id="btnNextQ" style="background:#334155; padding:4px 8px; font-size:0.75rem;">Próx ▶</button>
         </div>
 
         <div id="quizPrompt" class="quiz-prompt"></div>
 
         <div class="quiz-options">
-          <button id="btnCerto" class="btn-opt btn-opt-certo">CERTO</button>
-          <button id="btnErrado" class="btn-opt btn-opt-errado">ERRADO</button>
+          <button id="btnCerto" class="btn-opt btn-certo">CERTO</button>
+          <button id="btnErrado" class="btn-opt btn-errado">ERRADO</button>
         </div>
 
         <div id="quizFeedback" class="quiz-feedback"></div>
       </div>
 
-      <div style="display:flex; gap:8px; justify-content:space-between; align-items:center; margin-top:8px;">
-        <span id="scoreText" style="font-size:0.8rem; font-weight:700; color:#94a3b8;">Desempenho: 0/10</span>
-        <div style="display:flex; gap:8px;">
-          <button id="btnAction" style="background:#10b981; font-size:0.85rem; padding:9px 14px;">Marcar Feito</button>
-          <button id="btnClose" style="background:#475569; font-size:0.85rem; padding:9px 14px;">Fechar</button>
+      <div style="display:flex; gap:8px; justify-content:space-between; align-items:center;">
+        <span id="scoreText" style="font-size:0.75rem; font-weight:700; color:#94a3b8;">Desempenho: 0/10</span>
+        <div style="display:flex; gap:6px;">
+          <button id="btnAction" style="background:#10b981; font-size:0.8rem;">Concluir Casa ✨</button>
+          <button id="btnClose" style="background:#475569; font-size:0.8rem;">Fechar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <script type="module">
-    const boardData = [
-      { id: 1, c: "cat-pt", i: "📖", d: "Português", t: "Construção do texto, sentido e gêneros textuais" },
-      { id: 2, c: "cat-pt", i: "🔍", d: "Português", t: "Interpretação, organização interna e semântica" },
-      { id: 3, c: "cat-pt", i: "📓", d: "Português", t: "Morfologia e reconhecimento das classes de palavras" },
-      { id: 4, c: "cat-pt", i: "⏳", d: "Português", t: "Emprego de tempos e modos verbais" },
-      { id: 5, c: "cat-pt", i: "✒️", d: "Português", t: "Processos de formação de palavras e flexão nominal e verbal" },
-      { id: 6, c: "cat-pt", i: "📝", d: "Português", t: "Sintaxe: frase, oração, período e termos da oração" },
-      { id: 7, c: "cat-pt", i: "🔗", d: "Português", t: "Processos sintáticos de coordenação e subordinação" },
-      { id: 8, c: "cat-pt", i: "⚖️", d: "Português", t: "Concordância nominal e concordância verbal" },
-      { id: 9, c: "cat-pt", i: "🎯", d: "Português", t: "Transitividade e regência nominal e verbal" },
-      { id: 10, c: "cat-pt", i: "📌", d: "Português", t: "Colocação pronominal e mecanismos de coesão textual" },
-      { id: 11, c: "cat-pt", i: "✍️", d: "Português", t: "Ortografia oficial, acentuação gráfica e crase" },
-      { id: 12, c: "cat-pt", i: "💬", d: "Português", t: "Pontuação, reescrita de frases e variação linguística" },
+  <!-- Modal do Plano 90% -->
+  <div id="modalPlan" class="modal-overlay">
+    <div class="modal-card">
+      <h2 style="font-size:1.15rem; color:#10b981;">🎯 Plano para Atingir 90% de Rendimento</h2>
+      
+      <div class="plan-card">
+        <strong>1. Distribuição de Carga Horária:</strong><br>
+        • <strong>70% do tempo:</strong> Zona Vermelha (Casas 1 a 65)<br>
+        • <strong>20% do tempo:</strong> Zona Amarela (Casas 66 a 88)<br>
+        • <strong>10% do tempo:</strong> Zona Verde (Casas 89 a 100)
+      </div>
 
-      { id: 13, c: "cat-leg", i: "🏛️", d: "Ética", t: "Ética, moral, princípios, valores, cidadania e função pública" },
-      { id: 14, c: "cat-leg", i: "📜", d: "Ética", t: "Lei 8.112/1990: regime disciplinar, deveres, proibições e penalidades" },
-      { id: 15, c: "cat-leg", i: "⚖️", d: "Ética", t: "Lei 8.429/1992: disposições gerais e atos de improbidade" },
-      { id: 16, c: "cat-leg", i: "🛡️", d: "Ética", t: "Código de Ética do TJDFT (Resolução 9/2019 e Portaria 76/2020)" },
-      { id: 17, c: "cat-leg", i: "🏛️", d: "Regimento", t: "Portaria GPR 354/2016 e estrutura organizacional do TJDFT" },
-      { id: 18, c: "cat-leg", i: "🧑‍⚖️", d: "Regimento", t: "Funcionamento dos órgãos julgadores e sessões do Tribunal" },
-      { id: 19, c: "cat-leg", i: "📜", d: "Org. Judiciária", t: "Lei 11.697/2008: competência dos órgãos judiciais do DF" },
-      { id: 20, c: "cat-leg", i: "📂", d: "Org. Judiciária", t: "Lei 11.697/2008: serviços auxiliares e ofícios de justiça" },
-      { id: 21, c: "cat-leg", i: "📑", d: "Corregedoria", t: "Provimento Geral aplicado aos Juízes e Ofícios (DJe 10/10/2014)" },
-      { id: 22, c: "cat-leg", i: "📋", d: "Corregedoria", t: "Provimentos da Corregedoria nº 07/2010 e nº 03/2011" },
-      { id: 23, c: "cat-leg", i: "💻", d: "PJe", t: "Provimento Judicial Aplicado ao Processo Judicial Eletrônico (PJe)" },
+      <div class="plan-card">
+        <strong>2. Estudo da Legislação Seca:</strong><br>
+        Leitura diária e repetitiva dos artigos prioritários do CPC, CF/88, Lei 8.112/90, Lei 14.133/21, Lei 8.429/92 e Legislação do TJDFT.
+      </div>
 
-      { id: 24, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 1: Bateria de Questões de Língua Portuguesa" },
-      { id: 25, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 2: Questões de Legislação do DF e Ética" },
-      { id: 26, c: "cat-star", i: "🏆", d: "Desafio", t: "SIMULADO 1: Módulo de Conhecimentos Básicos Completo" },
+      <div class="plan-card">
+        <strong>3. Jurisprudência:</strong><br>
+        Memorização integral das Súmulas Vinculantes e Súmulas do STJ/STF em Direito Civil, Processo Civil, Penal e Constitucional.
+      </div>
 
-      { id: 27, c: "cat-const", i: "📜", d: "Constitucional", t: "Constituição: conceito, elementos, classificação e aplicabilidade" },
-      { id: 28, c: "cat-const", i: "🇧🇷", d: "Constitucional", t: "Poder Constituinte originário/derivado e Princípios Fundamentais" },
-      { id: 29, c: "cat-const", i: "🛡️", d: "Constitucional", t: "Direitos e garantias fundamentais: individuais e coletivos (art. 5º)" },
-      { id: 30, c: "cat-const", i: "🗳️", d: "Constitucional", t: "Direitos sociais, nacionalidade e direitos políticos" },
-      { id: 31, c: "cat-const", i: "🗺️", d: "Constitucional", t: "Organização do Estado: competências federativas e intervenção" },
-      { id: 32, c: "cat-const", i: "🏛️", d: "Constitucional", t: "Poder Legislativo: processo legislativo, CPIs e fiscalização contábil" },
-      { id: 33, c: "cat-const", i: "👔", d: "Constitucional", t: "Poder Executivo: atribuições presidenciais e crimes de responsabilidade" },
-      { id: 34, c: "cat-const", i: "⚖️", d: "Constitucional", t: "Poder Judiciário: órgãos de cúpula, competências e CNJ" },
-      { id: 35, c: "cat-const", i: "🛡️", d: "Constitucional", t: "Funções Essenciais à Justiça: Ministério Público, Advocacia e DPU" },
-      { id: 36, c: "cat-const", i: "🎯", d: "Constitucional", t: "Controle de Constitucionalidade: sistemas, ADI, ADC, ADPF e ADO" },
-      { id: 37, c: "cat-const", i: "📜", d: "Constitucional", t: "Sistema Tributário, Ordem Social e Ações Constitucionais (MS, HC, HD, MI)" },
+      <div class="plan-card">
+        <strong>4. Resolução Massiva:</strong><br>
+        Resolução diária das 10 questões Cebraspe por casa, repetindo os itens com erro para zerar as dúvidas sobre a letra de lei.
+      </div>
 
-      { id: 38, c: "cat-adm", i: "🏛️", d: "Administrativo", t: "Estado, órgãos públicos, Administração direta/indireta e princípios" },
-      { id: 39, c: "cat-adm", i: "👔", d: "Administrativo", t: "Agentes públicos e regime dos servidores civis (Lei 8.112/1990)" },
-      { id: 40, c: "cat-adm", i: "📑", d: "Administrativo", t: "Processo Administrativo (Lei Federal 9.784/99 e Lei DF 2.834/01)" },
-      { id: 41, c: "cat-adm", i: "⚙️", d: "Administrativo", t: "Poderes administrativos e Atos: atributos, requisitos e revogação" },
-      { id: 42, c: "cat-adm", i: "🏢", d: "Administrativo", t: "Serviços públicos, bens públicos e intervenção na propriedade" },
-      { id: 43, c: "cat-adm", i: "🛡️", d: "Administrativo", t: "Controle da Administração e Responsabilidade Civil do Estado" },
-      { id: 44, c: "cat-adm", i: "📜", d: "Administrativo", t: "Licitações e Contratos Administrativos (Nova Lei 14.133/2021)" },
-      { id: 45, c: "cat-adm", i: "🤝", d: "Administrativo", t: "Parcerias Público-Privadas (Lei Federal 11.079/2004)" },
-      { id: 46, c: "cat-adm", i: "⚖️", d: "Administrativo", t: "Lei Anticorrupção (12.846/2013) e LINDB no Direito Público" },
-      { id: 47, c: "cat-adm", i: "♿", d: "Administrativo", t: "Estatuto da Pessoa com Deficiência (Lei 13.146/2015)" },
+      <button id="btnClosePlan" style="background:#475569; align-self:flex-end;">Fechar Guia</button>
+    </div>
+  </div>
 
-      { id: 48, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 3: Simulado Direito Constitucional + Administrativo" },
+  <script>
+    // Configuração das 100 casas organizadas estritamente pelas Zonas
+    const boardData = [];
 
-      { id: 49, c: "cat-civ", i: "👶", d: "Direito Civil", t: "LINDB e Pessoas naturais: personalidade, capacidade e ausência" },
-      { id: 50, c: "cat-civ", i: "🏢", d: "Direito Civil", t: "Pessoas jurídicas, domicílio e classificação dos bens" },
-      { id: 51, c: "cat-civ", i: "✍️", d: "Direito Civil", t: "Fato e Negócio Jurídico: defeitos, nulidades, prescrição e decadência" },
-      { id: 52, c: "cat-civ", i: "📜", d: "Direito Civil", t: "Teoria Geral das Obrigações: espécies, transmissão e extinção" },
-      { id: 53, c: "cat-civ", i: "📑", d: "Direito Civil", t: "Teoria Geral dos Contratos e Contratos em Espécie" },
-      { id: 54, c: "cat-civ", i: "⚖️", d: "Direito Civil", t: "Atos unilaterais, títulos de crédito e responsabilidade civil" },
-      { id: 55, c: "cat-civ", i: "💼", d: "Direito Civil", t: "Direito de Empresa: empresário individual, sociedades e estabelecimento" },
-      { id: 56, c: "cat-civ", i: "🔑", d: "Direito Civil", t: "Posse e Direitos Reais: propriedade, usufruto e direitos de garantia" },
-      { id: 57, c: "cat-civ", i: "💍", d: "Direito Civil", t: "Direito de Família: casamento, regime de bens, alimentos e guarda" },
-      { id: 58, c: "cat-civ", i: "📜", d: "Direito Civil", t: "Tutela, curatela, tomada de decisão apoiada e Sucessões" },
-
-      { id: 59, c: "cat-civ", i: "⚖️", d: "Leis Civis", t: "Código de Defesa do Consumidor (Lei 8.078/1990)" },
-      { id: 60, c: "cat-civ", i: "🔑", d: "Leis Civis", t: "Lei do Inquilinato (8.245/1991) e Alienação Fiduciária de Imóveis" },
-      { id: 61, c: "cat-civ", i: "👶", d: "Leis Civis", t: "ECA (aspectos cíveis): convivência familiar, guarda, tutela e adoção" },
-      { id: 62, c: "cat-civ", i: "🔐", d: "Leis Civis", t: "Lei Geral de Proteção de Dados Pessoais (LGPD - 13.709/2018)" },
-      { id: 63, c: "cat-civ", i: "🗂️", d: "Leis Civis", t: "Registros Públicos (Lei 6.015/1973) e Provimentos CNJ correlatos" },
-      { id: 64, c: "cat-civ", i: "🏛️", d: "Leis Civis", t: "Estatuto da Cidade (Lei 10.257/2001) e Parcelamento do Solo Urbano" },
-      { id: 65, c: "cat-civ", i: "📜", d: "Leis Civis", t: "Estatuto do Idoso, Bem de Família e Lei de Liberdade Econômica" },
-
-      { id: 66, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 4: Simulado Completo de Direito Civil e Leis Especiais" },
-
-      { id: 67, c: "cat-proc-civ", i: "⚖️", d: "Processo Civil", t: "Normas fundamentais do CPC, jurisdição, ação e competência" },
-      { id: 68, c: "cat-proc-civ", i: "👥", d: "Processo Civil", t: "Partes, procuradores, despesas, gratuidade e intervenção de terceiros" },
-      { id: 69, c: "cat-proc-civ", i: "🧑‍⚖️", d: "Processo Civil", t: "Juiz: poderes, deveres, impedimentos, suspeição e auxiliares da justiça" },
-      { id: 70, c: "cat-proc-civ", i: "📬", d: "Processo Civil", t: "Atos processuais, prazos, citações, intimações e nulidades" },
-      { id: 71, c: "cat-proc-civ", i: "⚡", d: "Processo Civil", t: "Tutelas provisórias de urgência (antecipada/cautelar) e de evidência" },
-      { id: 72, c: "cat-proc-civ", i: "📑", d: "Processo Civil", t: "Procedimento Comum: petição inicial, contestação e revelia" },
-      { id: 73, c: "cat-proc-civ", i: "🔍", d: "Processo Civil", t: "Saneamento, julgamento conforme o estado do processo e Provas" },
-      { id: 74, c: "cat-proc-civ", i: "🗣️", d: "Processo Civil", t: "Audiência de instrução e julgamento, Sentença e Coisa Julgada" },
-      { id: 75, c: "cat-proc-civ", i: "📤", d: "Processo Civil", t: "Teoria geral dos recursos: Apelação, Agravo de Instrumento e EDcl" },
-      { id: 76, c: "cat-proc-civ", i: "📚", d: "Processo Civil", t: "Precedentes obrigatórios, IRDR, IAC, Reclamação e Ação Rescisória" },
-      { id: 77, c: "cat-proc-civ", i: "📜", d: "Processo Civil", t: "Processo de Execução, títulos executivos e Cumprimento de Sentença" },
-
-      { id: 78, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 5: Bateria Extensiva de Processo Civil" },
-
-      { id: 79, c: "cat-pen", i: "⚖️", d: "Direito Penal", t: "Princípios penais e aplicação da lei penal no tempo e no espaço" },
-      { id: 80, c: "cat-pen", i: "🎯", d: "Direito Penal", t: "Teoria do Crime: conduta, resultado, tipicidade, dolo, culpa e tentativa" },
-      { id: 81, c: "cat-pen", i: "🧠", d: "Direito Penal", t: "Excludentes de ilicitude, culpabilidade e Teoria do Erro" },
-      { id: 82, c: "cat-pen", i: "⛓️", d: "Direito Penal", t: "Concurso de pessoas, Teoria das Penas, dosimetria e regimes prisionais" },
-      { id: 83, c: "cat-pen", i: "🛑", d: "Direito Penal", t: "Extinção da punibilidade, crimes contra a pessoa e contra o patrimônio" },
-      { id: 84, c: "cat-pen", i: "🚨", d: "Direito Penal", t: "Crimes contra a dignidade sexual, fé pública e segurança pública" },
-      { id: 85, c: "cat-pen", i: "🏛️", d: "Direito Penal", t: "Crimes contra a Administração Pública praticados por funcionários e particulares" },
-      { id: 86, c: "cat-pen", i: "👮", d: "Leis Penais", t: "Lei de Abuso de Autoridade (13.869/2019) e Lei Antidrogas (11.343/2006)" },
-      { id: 87, c: "cat-pen", i: "🛡️", d: "Leis Penais", t: "Violência Doméstica / Maria da Penha (11.340) e Crimes Hediondos (8.072)" },
-      { id: 88, c: "cat-pen", i: "💼", d: "Leis Penais", t: "Organizações Criminosas (12.850), Lavagem de Capitais e Desarmamento" },
-
-      { id: 89, c: "cat-proc-pen", i: "🔍", d: "Processo Penal", t: "Princípios processuais penais e Inquérito Policial / Persecução" },
-      { id: 90, c: "cat-proc-pen", i: "⚖️", d: "Processo Penal", t: "Ação penal pública/privada, sujeitos do processo e competência criminal" },
-      { id: 91, c: "cat-proc-pen", i: "🔬", d: "Processo Penal", t: "Cadeia de custódia da prova pericial e interceptação telefônica" },
-      { id: 92, c: "cat-proc-pen", i: "🔒", d: "Processo Penal", t: "Prisões cautelares (flagrante, temporária, preventiva) e liberdade provisória" },
-      { id: 93, c: "cat-proc-pen", i: "📑", d: "Processo Penal", t: "Procedimento comum: rito ordinário e sumário no CPP" },
-      { id: 94, c: "cat-proc-pen", i: "👥", d: "Processo Penal", t: "Procedimento especial do Tribunal do Júri (duas fases)" },
-      { id: 95, c: "cat-proc-pen", i: "📤", d: "Processo Penal", t: "Nulidades processuais penais e recursos (Apelação, RESE, Carta)" },
-      { id: 96, c: "cat-proc-pen", i: "🕊️", d: "Processo Penal", t: "Ações autônomas de impugnação: Habeas Corpus e Revisão Criminal" },
-      { id: 97, c: "cat-proc-pen", i: "🏛️", d: "Processo Penal", t: "Juizados Especiais Criminais (Lei 9.099/1995) e Execução Penal (LEP)" },
-
-      { id: 98, c: "cat-star", i: "⭐", d: "Revisão", t: "CHECKPOINT 6: Simulado Penal + Processo Penal Integrados" },
-      { id: 99, c: "cat-star", i: "💎", d: "Jurisprudência", t: "CASA DA SÚMULA: Revisão Geral STF / STJ e Súmulas Vinculantes" },
-      { id: 100, c: "cat-star", i: "👑", d: "Nomeação", t: "CASA DA POSSE: Grande Simulado Final Cooperativo!" }
+    // 1. ZONA VERMELHA (~65% da trilha: Casas 1 a 65)
+    // 1.1 Processo Civil (Casas 1 a 15)
+    const procCivTopicos = [
+      "Recursos: Apelação e regras gerais dos recursos",
+      "Recursos: Agravo de Instrumento (art. 1.015 do CPC e taxatividade mitigada)",
+      "Recursos: Embargos de Declaração e efeitos infringentes",
+      "Tutela Provisória de Urgência: Antecipada e Cautelar",
+      "Tutela de Evidência e suas hipóteses no CPC",
+      "Procedimento Comum: Petição inicial e indeferimento",
+      "Procedimento Comum: Improcedência liminar do pedido",
+      "Procedimento Comum: Contestação e Reconvenção",
+      "Procedimento Comum: Revelia e seus efeitos práticos",
+      "Atos Processuais: Contagem de prazos em dias úteis e preclusão",
+      "Atos Processuais: Citações e intimações no CPC",
+      "Atos Processuais: Regime de nulidades processuais",
+      "Cumprimento de Sentença: Impugnação e regras de penhora",
+      "Execução: Títulos executivos judiciais e extrajudiciais",
+      "Precedentes: IRDR, IAC e Reclamação Constitucional"
     ];
+    procCivTopicos.forEach((t, i) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Civil", i: "⚖️", t }));
 
+    // 1.2 Direito Constitucional (Casas 16 a 27)
+    const constTopicos = [
+      "Artigo 5º: Direitos e deveres individuais e coletivos (Parte 1)",
+      "Artigo 5º: Direitos individuais e garantias fundamentais (Parte 2)",
+      "Remédios Constitucionais: Habeas Corpus e Mandado de Segurança",
+      "Remédios Constitucionais: Mandado de Injunção e Habeas Data",
+      "Controle Difuso de Constitucionalidade e Cláusula de Reserva de Plenário",
+      "Controle Concentrado: Legitimidade ativa para ADI, ADC e ADPF",
+      "Efeitos das decisões em ADI, ADC, ADPF e modulação de efeitos",
+      "Poder Judiciário: Competências do Supremo Tribunal Federal (STF)",
+      "Poder Judiciário: Competências do Superior Tribunal de Justiça (STJ)",
+      "Poder Judiciário: Tribunais de Justiça e Conselho Nacional de Justiça (CNJ)",
+      "Poder Judiciário: Súmulas Vinculantes e seus efeitos vinculantes",
+      "Administração Constitucional: Acesso a cargos, acumulação e estabilidade"
+    ];
+    constTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Constitucional", i: "📜", t }));
+
+    // 1.3 Direito Administrativo (Casas 28 a 39)
+    const admTopicos = [
+      "Lei 8.112/1990: Formas de provimento e vacância",
+      "Lei 8.112/1990: Direitos, vantagens, deveres e proibições",
+      "Lei 8.112/1990: Regime disciplinar e penalidades",
+      "Lei 8.112/1990: Processo Administrativo Disciplinar (PAD)",
+      "Licitações (Lei 14.133/2021): Modalidades e critérios de julgamento",
+      "Licitações (Lei 14.133/2021): Contratação direta (dispensa e inexigibilidade)",
+      "Contratos Administrativos (Lei 14.133/2021): Formalização e rescisão",
+      "Improbidade (Lei 8.429/1992): Exigência de dolo específico e princípios",
+      "Improbidade (Lei 8.429/1992): Espécies de atos ímprobos e prescrição",
+      "Atos Administrativos: Requisitos de validade e atributos",
+      "Atos Administrativos: Convalidação, revogação e anulação",
+      "Responsabilidade Civil do Estado: Risco administrativo e regresso"
+    ];
+    admTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Administrativo", i: "🏛️", t }));
+
+    // 1.4 Direito Processual Penal (Casas 40 a 51)
+    const procPenTopicos = [
+      "Prisão em Flagrante: Espécies, formalidades e audiência de custódia",
+      "Prisão Preventiva: Pressupostos, fundamentos e requisitos do CPP",
+      "Prisão Temporária (Lei 7.960/1989)",
+      "Medidas Cautelares Diversas da Prisão (art. 319 do CPP)",
+      "Inquérito Policial: Características, prazos e atuação do Ministério Público",
+      "Inquérito Policial: Arquivamento e Acordo de Não Persecução Penal (ANPP)",
+      "Provas: Teoria da prova ilícita e prova ilícita por derivação",
+      "Provas: Cadeia de custódia da prova pericial",
+      "Provas: Interceptação Telefônica (Lei 9.296/1996)",
+      "Tribunal do Júri: Procedimento bifásico e decisão de pronúncia",
+      "Recursos em Processo Penal: Apelação criminal",
+      "Recursos em Processo Penal: Recurso em Sentido Estrito (RESE)"
+    ];
+    procPenTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Penal", i: "🔍", t }));
+
+    // 1.5 Língua Portuguesa (Casas 52 a 65)
+    const ptTopicos = [
+      "Compreensão e Interpretação de Textos: Ideias gerais e inferências lógicas",
+      "Mecanismos de Coesão Textual: Coesão referencial e sequencial",
+      "Semântica e Significação Vocabular em Contexto",
+      "Sintaxe de Concordância Verbal",
+      "Sintaxe de Concordância Nominal",
+      "Regência Verbal: Principais verbos cobrados pelo Cebraspe",
+      "Regência Nominal e Emprego do Sinal Indicativo de Crase",
+      "Pontuação: Emprego da vírgula entre termos da oração",
+      "Pontuação: Vírgula entre orações coordenadas e subordinadas",
+      "Reescrita de Frases: Correção gramatical e manutenção de sentido",
+      "Colocação Pronominal: Próclise, mesóclise e ênclise",
+      "Morfologia: Conjunções coordenativas e subordinativas",
+      "Revisão Estratégica Cebraspe: Questões integradas da Zona Vermelha 1",
+      "Revisão Estratégica Cebraspe: Questões integradas da Zona Vermelha 2"
+    ];
+    ptTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Português", i: "📖", t }));
+
+    // 2. ZONA AMARELA (~23% da trilha: Casas 66 a 88)
+    // 2.1 Direito Penal (Casas 66 a 73)
+    const penTopicos = [
+      "Teoria do Crime: Conduta, resultado, tipicidade e nexo causal",
+      "Teoria do Crime: Dolo, culpa, consumação e tentativa",
+      "Teoria do Crime: Excludentes de ilicitude (art. 23 do CP)",
+      "Teoria do Crime: Culpabilidade e causas de exclusão",
+      "Aplicação da Pena: Critério trifásico e concurso de crimes",
+      "Crimes contra a Administração Pública: Peculato, concussão, corrupção e prevaricação",
+      "Crimes contra o Patrimônio: Furto, roubo e estelionato",
+      "Legislação Penal Especial: Drogas, Maria da Penha, Crimes Hediondos e Abuso de Autoridade"
+    ];
+    penTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Penal", i: "🎯", t }));
+
+    // 2.2 Direito Civil (Casas 74 a 81)
+    const civTopicos = [
+      "LINDB: Vigência e integração de leis e segurança jurídica pública (arts. 20 a 30)",
+      "Parte Geral: Personalidade, capacidade civil, prescrição e decadência",
+      "Obrigações: Inadimplemento, mora, juros, arras e cláusula penal",
+      "Teoria Geral dos Contratos e princípios contratuais",
+      "Direitos Reais: Posse, usucapião e garantias reais",
+      "Família e Sucessões: Regimes de bens e vocação hereditária",
+      "Código de Defesa do Consumidor: Responsabilidade civil e vício",
+      "Lei de Locações (Lei 8.245/1991): Ações locatícias e fiança"
+    ];
+    civTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Civil", i: "🏢", t }));
+
+    // 2.3 Legislação TJDFT (Casas 82 a 88)
+    const tjdftTopicos = [
+      "Regimento TJDFT: Composição e competência do Tribunal Pleno",
+      "Regimento TJDFT: Conselho da Magistratura e Câmaras Julgadoras",
+      "Lei 11.697/2008: Organização Judiciária do DF e competências cíveis",
+      "Lei 11.697/2008: Varas de Fazenda Pública, Criminais e Juizados",
+      "Provimento Geral da Corregedoria: Prazos e rotinas de mandados",
+      "Provimento do PJe: Regras e funcionamento do processo judicial eletrônico",
+      "Simulado da Legislação Específica TJDFT"
+    ];
+    tjdftTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Legislação TJDFT", i: "🏛️", t }));
+
+    // 3. ZONA VERDE (~12% da trilha: Casas 89 a 100)
+    const verdeTopicos = [
+      { d: "Civil/Empresarial", i: "💼", t: "Direito de Empresa: Empresário individual, sociedade limitada e sócios" },
+      { d: "Leis Especiais", i: "📋", t: "Leis Civis Pontuais: Registros Públicos, Parcelamento do Solo e Direitos Autorais" },
+      { d: "Constitucional", i: "📘", t: "Teoria Constitucional: Conceitos conceituais puros e Poder Constituinte" },
+      { d: "Ética", i: "🛡️", t: "Ética no Setor Público: Conceitos filosóficos e Código de Ética do TJDFT" },
+      { d: "Processo", i: "📑", t: "Processo Penal e Civil Residual: Restauração de autos e incidentes de falsidade" },
+      { d: "Simulado 1", i: "⭐", t: "Revisão e Simulado Integrado da Zona Vermelha" },
+      { d: "Simulado 2", i: "⭐", t: "Revisão e Simulado Integrado da Zona Amarela" },
+      { d: "Jurisprudência", i: "💎", t: "Revisão Geral de Súmulas Vinculantes e Teses Repetitivas STF/STJ" },
+      { d: "Reta Final", i: "🔥", t: "Simulado Reta Final Cebraspe TJDFT (Parte 1)" },
+      { d: "Reta Final", i: "🔥", t: "Simulado Reta Final Cebraspe TJDFT (Parte 2)" },
+      { d: "Véspera", i: "🎯", t: "Revisão de Letra de Lei Seca e Pegadinhas Cebraspe" },
+      { d: "Casa da Posse", i: "👑", t: "CASA 100: Grande Simulado Final da Aprovação TJDFT!" }
+    ];
+    verdeTopicos.forEach((obj) => boardData.push({ id: boardData.length + 1, z: "verde", d: obj.d, i: obj.i, t: obj.t }));
+
+    // Inicialização das questões provisórias
     boardData.forEach(item => {
       const qList = [];
-      for (let qNum = 1; qNum <= 10; qNum++) {
+      for (let q = 1; q <= 10; q++) {
         qList.push({
-          q: `Item ${qNum}: Conteúdo de ${item.d} relativo ao tópico "${item.t}". Aguardando o cadastro das questões oficiais no arquivo da casa.`,
+          q: `Item ${q}: Questão temática sobre "${item.t}".\n(Aguardando importação do arquivo da casa ou upload JSON).`,
           a: "C",
-          exp: `Gabarito provisório da questão ${qNum} para a Casa ${item.id}.`
+          exp: `Comentário da questão ${q} referente ao tema ${item.t}.`
         });
       }
       item.questions = qList;
       item.loaded = false;
     });
 
-    let concluidas = JSON.parse(localStorage.getItem("trilha_tjdft_done") || "[]");
+    let concluidas = JSON.parse(localStorage.getItem("tjdft_concluidas") || "[]");
+    let userAnswers = JSON.parse(localStorage.getItem("tjdft_respostas") || "{}");
     let currentTile = null;
     let currentQIndex = 0;
-    let userAnswers = {};
+    let filtroAtual = "todas";
 
     const board = document.getElementById("board");
     const modal = document.getElementById("modal");
-    const modalNum = document.getElementById("modalNum");
-    const modalDisc = document.getElementById("modalDisc");
-    const modalIcon = document.getElementById("modalIcon");
-    const modalTopic = document.getElementById("modalTopic");
-    const quizCounter = document.getElementById("quizCounter");
-    const quizPrompt = document.getElementById("quizPrompt");
-    const quizFeedback = document.getElementById("quizFeedback");
-    const btnCerto = document.getElementById("btnCerto");
-    const btnErrado = document.getElementById("btnErrado");
-    const btnPrevQ = document.getElementById("btnPrevQ");
-    const btnNextQ = document.getElementById("btnNextQ");
-    const scoreText = document.getElementById("scoreText");
-    const btnAction = document.getElementById("btnAction");
+    const modalPlan = document.getElementById("modalPlan");
     const bar = document.getElementById("bar");
     const txtCasas = document.getElementById("txtCasas");
     const txtPct = document.getElementById("txtPct");
@@ -520,9 +624,11 @@
     function render() {
       board.innerHTML = "";
       boardData.forEach(item => {
+        if (filtroAtual !== "todas" && item.z !== filtroAtual) return;
+
         const isDone = concluidas.includes(item.id);
         const div = document.createElement("div");
-        div.className = `tile ${item.c} ${isDone ? "concluido" : ""}`;
+        div.className = `tile zona-${item.z} ${isDone ? "concluido" : ""}`;
         div.innerHTML = `
           <div class="tile-icon">${item.i}</div>
           <div class="tile-number">${item.id}</div>
@@ -531,6 +637,7 @@
         div.onclick = () => openTile(item);
         board.appendChild(div);
       });
+
       refreshStats();
     }
 
@@ -540,7 +647,15 @@
       bar.style.width = pct + "%";
       txtCasas.innerText = `${done} / ${boardData.length} Casas`;
       txtPct.innerText = `${pct}% Concluído`;
-      localStorage.setItem("trilha_tjdft_done", JSON.stringify(concluidas));
+      localStorage.setItem("tjdft_concluidas", JSON.stringify(concluidas));
+      localStorage.setItem("tjdft_respostas", JSON.stringify(userAnswers));
+    }
+
+    function filtrar(zona) {
+      filtroAtual = zona;
+      document.querySelectorAll(".btn-filter").forEach(b => b.classList.remove("active"));
+      event.target.classList.add("active");
+      render();
     }
 
     async function openTile(item) {
@@ -549,24 +664,27 @@
 
       if (!item.loaded) {
         try {
-          const module = await import(`./casas/casa${item.id}.js`);
-          if (module.default && module.default.questions) {
-            item.questions = module.default.questions;
+          const mod = await import(`./casas/casa${item.id}.js`);
+          if (mod.default && mod.default.questions) {
+            item.questions = mod.default.questions;
             item.loaded = true;
           }
-        } catch (e) {
-          // Mantém as questões provisórias caso o arquivo da casa não exista
-        }
+        } catch(e) {}
       }
 
       if (!userAnswers[item.id]) userAnswers[item.id] = {};
 
-      modalNum.innerText = `CASA ${item.id}`;
-      modalDisc.innerText = item.d;
-      modalIcon.innerText = item.i;
-      modalTopic.innerText = `Meta: ${item.t}`;
+      document.getElementById("modalIcon").innerText = item.i;
+      document.getElementById("modalNum").innerText = `CASA ${item.id}`;
+      document.getElementById("modalDisc").innerText = item.d;
+      document.getElementById("modalTopic").innerText = `Tópico: ${item.t}`;
+
+      const badge = document.getElementById("modalBadge");
+      badge.innerText = `Zona ${item.z}`;
+      badge.className = `badge-zona b-${item.z}`;
 
       const isDone = concluidas.includes(item.id);
+      const btnAction = document.getElementById("btnAction");
       btnAction.innerText = isDone ? "Desmarcar" : "Concluir Casa ✨";
       btnAction.style.background = isDone ? "#dc2626" : "#10b981";
 
@@ -576,17 +694,19 @@
 
     function renderQuestion() {
       const q = currentTile.questions[currentQIndex];
-      quizCounter.innerText = `Questão ${currentQIndex + 1} de ${currentTile.questions.length}`;
-      quizPrompt.innerText = q.q;
+      document.getElementById("quizCounter").innerText = `Questão ${currentQIndex + 1} de ${currentTile.questions.length}`;
+      document.getElementById("quizPrompt").innerText = q.q;
 
-      btnCerto.className = "btn-opt btn-opt-certo";
-      btnErrado.className = "btn-opt btn-opt-errado";
-      quizFeedback.className = "quiz-feedback";
+      const btnC = document.getElementById("btnCerto");
+      const btnE = document.getElementById("btnErrado");
+      const fb = document.getElementById("quizFeedback");
 
-      const answered = userAnswers[currentTile.id][currentQIndex];
-      if (answered) {
-        showResult(answered);
-      }
+      btnC.className = "btn-opt btn-certo";
+      btnE.className = "btn-opt btn-errado";
+      fb.className = "quiz-feedback";
+
+      const ans = userAnswers[currentTile.id][currentQIndex];
+      if (ans) showResult(ans);
 
       updateScore();
     }
@@ -595,54 +715,54 @@
       userAnswers[currentTile.id][currentQIndex] = choice;
       showResult(choice);
       updateScore();
+      refreshStats();
     }
 
     function showResult(choice) {
       const q = currentTile.questions[currentQIndex];
       const isRight = (choice === q.a);
 
-      btnCerto.className = "btn-opt btn-opt-certo";
-      btnErrado.className = "btn-opt btn-opt-errado";
+      const btnC = document.getElementById("btnCerto");
+      const btnE = document.getElementById("btnErrado");
+      const fb = document.getElementById("quizFeedback");
 
-      if (choice === "C") {
-        btnCerto.classList.add(isRight ? "btn-correct" : "btn-incorrect");
-      } else {
-        btnErrado.classList.add(isRight ? "btn-correct" : "btn-incorrect");
-      }
+      btnC.className = "btn-opt btn-certo";
+      btnE.className = "btn-opt btn-errado";
 
-      quizFeedback.className = "quiz-feedback show " + (isRight ? "success" : "danger");
-      quizFeedback.innerHTML = `<strong>${isRight ? "CORRETO! 🎉" : "INCORRETO! ⚠️"}</strong> (Gabarito: ${q.a === "C" ? "CERTO" : "ERRADO"})<br>${q.exp}`;
+      if (choice === "C") btnC.classList.add(isRight ? "btn-correct" : "btn-incorrect");
+      if (choice === "E") btnE.classList.add(isRight ? "btn-correct" : "btn-incorrect");
+
+      fb.className = "quiz-feedback show " + (isRight ? "success" : "danger");
+      fb.innerHTML = `<strong>${isRight ? "CORRETO! 🎉" : "INCORRETO! ⚠️"}</strong> (Gabarito: ${q.a === "C" ? "CERTO" : "ERRADO"})<br>${q.exp}`;
     }
 
     function updateScore() {
       const total = currentTile.questions.length;
       let hits = 0;
       for (let i = 0; i < total; i++) {
-        if (userAnswers[currentTile.id][i] === currentTile.questions[i].a) {
-          hits++;
-        }
+        if (userAnswers[currentTile.id][i] === currentTile.questions[i].a) hits++;
       }
-      scoreText.innerText = `Desempenho: ${hits}/${total} Acertos`;
+      document.getElementById("scoreText").innerText = `Desempenho: ${hits}/${total} Acertos`;
     }
 
-    btnPrevQ.onclick = () => {
+    document.getElementById("btnCerto").onclick = () => answer("C");
+    document.getElementById("btnErrado").onclick = () => answer("E");
+
+    document.getElementById("btnPrevQ").onclick = () => {
       if (currentQIndex > 0) {
         currentQIndex--;
         renderQuestion();
       }
     };
 
-    btnNextQ.onclick = () => {
+    document.getElementById("btnNextQ").onclick = () => {
       if (currentQIndex < currentTile.questions.length - 1) {
         currentQIndex++;
         renderQuestion();
       }
     };
 
-    btnCerto.onclick = () => answer("C");
-    btnErrado.onclick = () => answer("E");
-
-    btnAction.onclick = () => {
+    document.getElementById("btnAction").onclick = () => {
       if (concluidas.includes(currentTile.id)) {
         concluidas = concluidas.filter(x => x !== currentTile.id);
       } else {
@@ -652,25 +772,22 @@
       render();
     };
 
-    document.getElementById("btnClose").onclick = () => {
-      modal.style.display = "none";
-    };
+    document.getElementById("btnClose").onclick = () => modal.style.display = "none";
+    document.getElementById("btnPlano").onclick = () => modalPlan.style.display = "flex";
+    document.getElementById("btnClosePlan").onclick = () => modalPlan.style.display = "none";
 
+    // Backup em JSON
     document.getElementById("btnSalvar").onclick = () => {
-      const backup = {
-        done: concluidas,
-        answers: userAnswers
-      };
-      const blob = new Blob([JSON.stringify(backup)], { type: "application/json" });
+      const data = { done: concluidas, answers: userAnswers };
+      const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
       a.download = "trilha_tjdft_backup.json";
       a.click();
     };
 
-    document.getElementById("btnCarregar").onclick = () => {
-      document.getElementById("inputUpload").click();
-    };
+    // Upload Dinâmico de Questões ou Backup
+    document.getElementById("btnCarregar").onclick = () => document.getElementById("inputUpload").click();
 
     document.getElementById("inputUpload").onchange = (e) => {
       const file = e.target.files[0];
@@ -679,18 +796,33 @@
       reader.onload = (evt) => {
         try {
           const res = JSON.parse(evt.target.result);
+
+          // Upload de questões de uma casa específica
+          if (res.id && res.questions) {
+            const tile = boardData.find(c => c.id === res.id);
+            if (tile) {
+              tile.questions = res.questions;
+              tile.loaded = true;
+              alert(`Questões da Casa ${res.id} carregadas!`);
+              render();
+              return;
+            }
+          }
+
+          // Upload de backup de respostas
           concluidas = res.done || [];
           userAnswers = res.answers || {};
           render();
+          alert("Backup restaurado com sucesso!");
         } catch {
-          alert("Arquivo corrompido!");
+          alert("Arquivo JSON inválido!");
         }
       };
       reader.readAsText(file);
     };
 
     document.getElementById("btnResetar").onclick = () => {
-      if (confirm("Deseja zerar as casas estudadas e respostas?")) {
+      if (confirm("Zerar todas as casas e histórico de respostas?")) {
         concluidas = [];
         userAnswers = {};
         render();
