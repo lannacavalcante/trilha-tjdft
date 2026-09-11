@@ -2,54 +2,54 @@ export default {
   id: 2,
   questions: [
     {
-      q: "Texto: 'As instituições e políticas de propriedade industrial (PI) têm implicações significativas para o desenvolvimento nacional em áreas distintas, como: os investimentos estrangeiros diretos, a produção e a disseminação de tecnologias digitais...'\n\n[Quadrix - CRT-SP - Advogado]\nJulgue o item:\nO uso da enumeração, ao listar áreas vitais para o desenvolvimento do País, reforça a relevância do texto, inferindo-se que aquilo a ser defendido não se restringe a uma questão de patente.",
-      a: "C",
-      exp: "Gabarito: CERTO. A enumeração de setores estratégicos (saúde, agricultura, segurança alimentar, etc.) demonstra que o debate sobre propriedade industrial transcende o aspecto puramente técnico de patentes, impactando o desenvolvimento soberano do país."
-    },
-    {
-      q: "Texto: 'O Brasil, como outros países em desenvolvimento, vê inconsistências entre o TRIPS e a Convenção sobre Diversidade Biológica (CDB), com implicações importantes para o combate à biopirataria e a proteção do patrimônio biológico...'\n\n[Quadrix - CRT-SP - Advogado]\nJulgue o item:\nDepreende-se do trecho \"com implicações importantes para o combate à biopirataria e a proteção do patrimônio biológico.\" que tais implicações são positivas para o Brasil.",
+      q: "Em ação de conhecimento sob o rito comum, o juiz acolheu a impugnação ao valor da causa apresentada pelo réu e determinou a retificação do montante indicado na petição inicial.\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nContra a decisão interlocutória que decide o incidente de impugnação ao valor da causa cabe a interposição imediata de agravo de instrumento, por expressa previsão no rol taxativo do art. 1.015 do CPC.",
       a: "E",
-      exp: "Gabarito: ERRADO. O vocábulo \"inconsistências\" demonstra conflito e desvantagem para os países em desenvolvimento, indicando que as implicações geram apreensão e vulnerabilidade quanto à biopirataria, e não benefícios imediatos."
+      exp: "Gabarito: ERRADO. A decisão sobre valor da causa não consta expressamente no rol do art. 1.015 do CPC nem nas exceções de cabimento direto, devendo a matéria ser suscitada em preliminar de eventual apelação ou contrarrazões, salvo se demonstrada a urgência decorrente da inutilidade do julgamento diferido (Tema 988/STJ)."
     },
     {
-      q: "Texto: 'As instituições e políticas de propriedade industrial (PI)...'\n\n[Quadrix - CRT-SP - Advogado]\nJulgue o item:\nA impessoalidade do texto e o uso de termos técnicos, como \"patenteabilidade\", reforçam a formalidade linguística.",
+      q: "Segundo a tese vinculante firmada pelo Superior Tribunal de Justiça no julgamento do Tema Repetitivo 988 (Recurso Especial representativo de controvérsia):\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nO rol do art. 1.015 do CPC é de taxatividade mitigada, admitindo-se a interposição de agravo de instrumento quando verificada a urgência decorrente da inutilidade do julgamento da questão no recurso de apelação.",
       a: "C",
-      exp: "Gabarito: CERTO. O distanciamento do autor, a ausência de marcas de primeira pessoa e o emprego de vocabulário técnico-jurídico caracterizam a modalidade formal e impessoal do gênero informativo/analítico."
+      exp: "Gabarito: CERTO. Tese expressa do Tema 988/STJ: \"O rol do art. 1.015 do CPC é de taxatividade mitigada, por isso admite a interposição de agravo de instrumento quando verificada a urgência decorrente da inutilidade do julgamento da questão no recurso de apelação\"."
     },
     {
-      q: "Texto: 'As instituições e políticas de propriedade industrial (PI)...'\n\n[Quadrix - CRT-SP - Advogado]\nJulgue o item:\nInfere-se das ideias do texto que os autores criticam a propriedade intelectual, sobretudo, no âmbito da biologia e da genética.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O texto não se opõe à propriedade intelectual como instituto geral, mas sim aponta o conflito normativo entre o TRIPS e a soberania prevista na CDB quanto a recursos genéticos e conhecimentos tradicionais."
-    },
-    {
-      q: "Texto: '...enquanto a CDB estipula que os países são soberanos para decidir sobre a proteção dos recursos genéticos presentes em seu território, incluindo micro-organismos.'\n\n[Quadrix - CRT-SP - Advogado]\nJulgue o item:\nNo trecho citado, a retirada da preposição \"sobre\" não alteraria as relações semânticas e sintáticas da sentença.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O verbo \"decidir\" rege a preposição \"sobre\" com sentido de 'deliberar a respeito de algo'. A omissão tornaria a oração viciada ou alteraria a transitividade e a clareza semântica original."
-    },
-    {
-      q: "Texto: 'No entanto, a busca pela eficiência não pode atropelar a segurança jurídica... Atos vinculados, que possuem requisitos objetivos definidos em lei, são candidatos ideais para a automação. Já os atos discricionários, que exigem juízo de valor e oportunidade, apresentam desafios complexos quando delegados a uma máquina.'\n\n[CESPE - UNEAL - Analista Administrativo - Direito]\nJulgue o item:\nEntende-se da leitura do terceiro parágrafo que, por dependerem menos de critérios objetivos definidos em lei, os atos discricionários são os mais adequados para automação.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O texto afirma o exato oposto: os atos *vinculados* são os ideais para automação, ao passo que os discricionários apresentam desafios complexos por envolverem juízo de conveniência e oportunidade."
-    },
-    {
-      q: "Texto: 'A incorporação de novas tecnologias no setor público... Para o profissional do direito, compreender como os algoritmos interagem com os princípios constitucionais da administração pública é fundamental...'\n\n[CESPE - UNEAL - Analista Administrativo - Direito]\nJulgue o item:\nEntende-se das ideias estabelecidas no primeiro parágrafo que a atuação do profissional do direito baseada na IA ultrapassa aspectos operacionais, envolvendo também a proteção de direitos fundamentais.",
+      q: "Acerca do regime recursal das decisões sobre competência judiciária no Código de Processo Civil:\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nConforme a jurisprudência consolidada do STJ, é cabível agravo de instrumento contra decisão interlocutória que rejeita a alegação de incompetência absoluta ou relativa do juízo, em razão da taxatividade mitigada do art. 1.015 do CPC.",
       a: "C",
-      exp: "Gabarito: CERTO. O primeiro parágrafo explicita que a questão não se limita à eficiência técnica/operacional, mas abrange fundamentalmente a preservação das garantias e dos direitos fundamentais do administrado."
+      exp: "Gabarito: CERTO. O STJ pacificou que a decisão que versa sobre competência (rejeição ou acolhimento de incompetência relativa/absoluta) submete-se ao agravo de instrumento imediato, pois aguardar a apelação tornaria inútil todo o procedimento eventualmente conduzido por juízo incompetente."
     },
     {
-      q: "Texto: 'No entanto, a busca pela eficiência não pode atropelar a segurança jurídica.'\n\n[CESPE - UNEAL - Analista Administrativo - Direito]\nJulgue o item:\nRespeitando-se a ortografia oficial em vigor e a coerência das ideias do texto, a expressão \"No entanto\" (início do terceiro parágrafo) poderia ser substituída por Não obstante.",
+      q: "No curso de uma ação indenizatória, o juiz proferiu decisão interlocutória indeferindo o pedido de desconsideração da personalidade jurídica formulado pelo autor.\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nContra a referida decisão interlocutória cabe agravo de instrumento, por expressa previsão legal no Código de Processo Civil.",
       a: "C",
-      exp: "Gabarito: CERTO. A locução conjuntiva \"Não obstante\" possui valor adversativo/concessivo e atua perfeitamente como sinônimo de \"No entanto\", mantendo o sentido de oposição e a correção gramatical."
+      exp: "Gabarito: CERTO. O art. 1.015, IV, do CPC expressamente autoriza o agravo de instrumento contra decisão interlocutória que versar sobre o \"incidente de desconsideração da personalidade jurídica\"."
     },
     {
-      q: "Texto: 'A automação não retira do Estado a responsabilidade pela higidez do ato.'\n\n[CESPE - UNEAL - Analista Administrativo - Direito]\nJulgue o item:\nNo segmento em destaque, o vocábulo \"higidez\" é sinônimo de celeridade.",
+      q: "Em cumprimento de sentença, o magistrado indeferiu o pedido de penhora sobre percentual do faturamento da empresa executada.\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nPor se tratar de decisão interlocutória proferida na fase de cumprimento de sentença, não se aplica o rol restritivo do art. 1.015, sendo a decisão amplamente agravável de instrumento.",
+      a: "C",
+      exp: "Gabarito: CERTO. Conforme o parágrafo único do art. 1.015 do CPC, cabe agravo de instrumento contra TODAS as decisões interlocutórias proferidas na fase de liquidação de sentença, no cumprimento de sentença, no processo de execução e no processo de inventário."
+    },
+    {
+      q: "Em autos eletrônicos de ação monitória, a parte autora agravou de instrumento no tribunal e não comunicou a interposição ao juízo de primeiro grau.\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nTratando-se de autos eletrônicos, o agravante é dispensado de juntar, na vara de origem, cópia da petição do agravo de instrumento e do comprovante de sua interposição.",
+      a: "C",
+      exp: "Gabarito: CERTO. Aplicação literal do art. 1.018, § 2º, do CPC: \"Não sendo eletrônicos os autos, o agravante tomará a providência prevista no caput...\" e § 3º: \"O descumprimento da exigência de que trata o § 2º, desde que arguido e provado pelo agravado, importa inadmissibilidade do agravo\". Tratando-se de autos eletrônicos, a comunicação é facultativa."
+    },
+    {
+      q: "Após ser intimado de decisão concessiva de tutela de urgência antecipada, o réu interpôs agravo de instrumento no 16º dia útil subsequente.\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nO prazo para a interposição de agravo de instrumento contra decisões concessivas de tutelas provisórias é de 10 dias úteis, por se tratar de medida excepcional e urgente.",
       a: "E",
-      exp: "Gabarito: ERRADO. 'Higidez' significa integridade, legalidade, solidez ou conformidade com o direito. Não possui relação de sinonímia com 'celeridade' (rapidez/velocidade)."
+      exp: "Gabarito: ERRADO. O prazo geral para os recursos cíveis é unificado em 15 dias úteis (art. 1.003, § 5º, do CPC), com exceção apenas dos Embargos de Declaração (5 dias úteis). O agravo de instrumento segue a regra de 15 dias úteis."
     },
     {
-      q: "Texto: 'A automação não retira do Estado a responsabilidade pela higidez do ato. Pelo contrário, ela exige um controle prévio muito mais rigoroso sobre os parâmetros de programação do software.'\n\n[CESPE - UNEAL - Analista Administrativo - Direito]\nJulgue o item:\nDas relações de sentido estabelecidas entre os dois primeiros períodos do último parágrafo conclui-se que o segmento \"Pelo contrário\" introduz uma inversão argumentativa que não apenas reforça a negativa, presente no primeiro período, de uma possível expectativa de a automação reduzir a responsabilidade do Estado, mas a intensifica.",
+      q: "Em ação ordinária, o juiz proferiu decisão interlocutória excluindo litisconsorte passivo por manifesta ilegitimidade ad causam, prosseguindo a ação quanto aos demais réus.\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nA decisão interlocutória que exclui litisconsorte desafia recurso de apelação, tendo em vista a extinção do processo com resolução parcial quanto ao sujeito excluído.",
+      a: "E",
+      exp: "Gabarito: ERRADO. A decisão que exclui litisconsorte não extingue a relação processual principal, qualificando-se como interlocutória. Por expressa determinação do art. 1.015, VII, do CPC, o recurso cabível é o agravo de instrumento."
+    },
+    {
+      q: "O autor requereu ao relator a concessão de efeito suspensivo ativo ao agravo de instrumento contra decisão que negara tutela de urgência na origem.\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nO relator pode conceder tutela provisória recursal (efeito ativo) ao agravo de instrumento se houver risco de dano grave ou de difícil reparação e probabilidade de provimento do recurso.",
       a: "C",
-      exp: "Gabarito: CERTO. O conector 'Pelo contrário' rebate a hipótese de flexibilização da cautela estatal, asseverando em seguida que a responsabilidade exige controle prévio ainda mais rigoroso."
+      exp: "Gabarito: CERTO. Nos termos do art. 1.019, I, c/c art. 995, parágrafo único, do CPC, o relator pode atribuir efeito suspensivo ao agravo ou deferir em antecipação de tutela a pretensão recursal diante de risco de dano e probabilidade do direito."
+    },
+    {
+      q: "Em processo de execução de título extrajudicial promovido por autarquia federal perante a Justiça Estadual delegada:\n\n[Inédita - Estilo Cebraspe / TJDFT]\nJulgue o item:\nAo interpor agravo de instrumento, a União, os Estados, o Distrito Federal, os Municípios e as respectivas autarquias são isentos do recolhimento de preparo e do porte de remessa e retorno em autos físicos.",
+      a: "C",
+      exp: "Gabarito: CERTO. De acordo com o art. 1.007, § 1º, do CPC, são dispensados de preparo recursal a Fazenda Pública (União, Estados, DF, Municípios e suas autarquias e fundações), o Ministério Público e a Defensoria Pública."
     }
   ]
 };
