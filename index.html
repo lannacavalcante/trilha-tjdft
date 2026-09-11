@@ -167,7 +167,6 @@
     .tile.zona-amarela { border-color: rgba(234, 179, 8, 0.6); background: rgba(234, 179, 8, 0.1); }
     .tile.zona-verde { border-color: rgba(16, 185, 129, 0.6); background: rgba(16, 185, 129, 0.1); }
 
-    /* Sinalizadores de Retenção */
     .tile.score-high {
       border-color: #10b981 !important;
       background: rgba(16, 185, 129, 0.28) !important;
@@ -261,7 +260,6 @@
       line-height: 1.4;
     }
 
-    /* Links Jurídicos */
     .links-box {
       display: flex;
       gap: 8px;
@@ -277,11 +275,12 @@
       background: #1e293b;
       color: #38bdf8;
       border: 1px solid #334155;
-      padding: 6px 10px;
+      padding: 7px 10px;
       border-radius: 6px;
       font-size: 0.72rem;
       font-weight: 700;
       text-decoration: none;
+      text-align: center;
     }
 
     .btn-link-legal:hover {
@@ -421,7 +420,7 @@
       <!-- Links Diretos: Lei Seca e Jurisprudência -->
       <div class="links-box">
         <a id="linkLeiSeca" class="btn-link-legal" href="#" target="_blank">📖 Consultar Lei Seca</a>
-        <a id="linkJuris" class="btn-link-legal" href="#" target="_blank">⚖️ Consultar Jurisprudência / Súmulas</a>
+        <a id="linkJuris" class="btn-link-legal" href="#" target="_blank">⚖️ Consultar Jurisprudência</a>
       </div>
 
       <div class="quiz-box">
@@ -484,138 +483,163 @@
   <script>
     const boardData = [];
 
-    // Mapeamento de Links por Matéria
-    const legalLinks = {
-      "Processo Civil": {
-        lei: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13105.htm",
-        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
-      },
-      "Constitucional": {
-        lei: "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-        juris: "https://jurisprudencia.stf.jus.br/pages/search"
-      },
-      "Administrativo": {
-        lei: "https://www.planalto.gov.br/ccivil_03/leis/l8112cons.htm",
-        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
-      },
-      "Processo Penal": {
-        lei: "https://www.planalto.gov.br/ccivil_03/decreto-lei/del3689.htm",
-        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
-      },
-      "Português": {
-        lei: "https://www.planalto.gov.br/ccivil_03/decreto/2008/d6583.htm",
-        juris: "https://www.google.com/search?q=portugues+cebraspe+regras"
-      },
-      "Direito Penal": {
-        lei: "https://www.planalto.gov.br/ccivil_03/decreto-lei/del2848compilado.htm",
-        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
-      },
-      "Direito Civil": {
-        lei: "https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm",
-        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
-      },
-      "Legislação TJDFT": {
-        lei: "https://www.tjdft.jus.br/institucional/regimento-interno-e-legislacao",
-        juris: "https://pesquisajuris.tjdft.jus.br/IndexadorAcordaos-web/sistj"
-      },
-      "default": {
-        lei: "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-        juris: "https://jurisprudencia.stf.jus.br/pages/search"
-      }
-    };
+    // Base de URLs com artigos
+    const URL_CPC = "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13105.htm";
+    const URL_CF = "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm";
+    const URL_8112 = "https://www.planalto.gov.br/ccivil_03/leis/l8112cons.htm";
+    const URL_14133 = "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm";
+    const URL_8429 = "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm";
+    const URL_CPP = "https://www.planalto.gov.br/ccivil_03/decreto-lei/del3689.htm";
+    const URL_CP = "https://www.planalto.gov.br/ccivil_03/decreto-lei/del2848compilado.htm";
+    const URL_CC = "https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm";
+    const URL_TJDFT_LEG = "https://www.tjdft.jus.br/institucional/regimento-interno-e-legislacao";
 
-    // 1. ZONA VERMELHA (1-65)
-    const procCiv = [
-      "Recursos: Apelação e regras gerais", "Recursos: Agravo de Instrumento (art. 1.015 do CPC)",
-      "Recursos: Embargos de Declaração", "Tutela Provisória: Urgência Antecipada e Cautelar",
-      "Tutela de Evidência", "Procedimento Comum: Petição inicial e indeferimento",
-      "Procedimento Comum: Improcedência liminar", "Procedimento Comum: Contestação e Reconvenção",
-      "Procedimento Comum: Revelia e efeitos", "Atos Processuais: Prazos em dias úteis",
-      "Atos Processuais: Citações e intimações", "Atos Processuais: Nulidades",
-      "Cumprimento de Sentença e penhora", "Execução: Títulos executivos", "Precedentes: IRDR, IAC e Reclamação"
+    function linkJuris(termo) {
+      return `https://www.google.com/search?q=jurisprudencia+sumula+STF+STJ+TJDFT+${encodeURIComponent(termo)}`;
+    }
+
+    // 1. ZONA VERMELHA (Casas 1 a 65)
+    // 1.1 Processo Civil (Casas 1 a 15)
+    const procCivItens = [
+      { t: "Recursos: Apelação e regras gerais", lei: `${URL_CPC}#art994`, j: "recursos apelacao CPC" },
+      { t: "Recursos: Agravo de Instrumento (art. 1.015 do CPC)", lei: `${URL_CPC}#art1015`, j: "agravo de instrumento tema 988 STJ taxatividade mitigada" },
+      { t: "Recursos: Embargos de Declaração", lei: `${URL_CPC}#art1022`, j: "embargos de declaracao efeitos infringentes sumula STJ" },
+      { t: "Tutela Provisória: Urgência Antecipada e Cautelar", lei: `${URL_CPC}#art300`, j: "tutela de urgencia requisitos STJ" },
+      { t: "Tutela de Evidência", lei: `${URL_CPC}#art311`, j: "tutela de evidencia hipoteses CPC" },
+      { t: "Procedimento Comum: Petição inicial e indeferimento", lei: `${URL_CPC}#art319`, j: "indeferimento peticao inicial CPC STJ" },
+      { t: "Procedimento Comum: Improcedência liminar", lei: `${URL_CPC}#art332`, j: "improcedencia liminar do pedido CPC" },
+      { t: "Procedimento Comum: Contestação e Reconvenção", lei: `${URL_CPC}#art335`, j: "contestacao reconvencao preclusao CPC" },
+      { t: "Procedimento Comum: Revelia e efeitos", lei: `${URL_CPC}#art344`, j: "revelia presuncao de veracidade STJ" },
+      { t: "Atos Processuais: Prazos em dias úteis", lei: `${URL_CPC}#art219`, j: "contagem prazos dias uteis CPC" },
+      { t: "Atos Processuais: Citações e intimações", lei: `${URL_CPC}#art238`, j: "nulidade de citacao intimacao CPC STJ" },
+      { t: "Atos Processuais: Nulidades", lei: `${URL_CPC}#art276`, j: "nulidades processuais pas de nullite sans grief STJ" },
+      { t: "Cumprimento de Sentença e penhora", lei: `${URL_CPC}#art523`, j: "cumprimento de sentenca impugnacao impenhorabilidade sumula STJ" },
+      { t: "Execução: Títulos executivos", lei: `${URL_CPC}#art784`, j: "titulo executivo extrajudicial requisitos STJ" },
+      { t: "Precedentes: IRDR, IAC e Reclamação", lei: `${URL_CPC}#art976`, j: "IRDR reclamacao constitucional STF STJ" }
     ];
-    procCiv.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Civil", i: "⚖️", t }));
+    procCivItens.forEach(item => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Civil", i: "⚖️", t: item.t, leiUrl: item.lei, jurisUrl: linkJuris(item.j) }));
 
-    const dirConst = [
-      "Artigo 5º: Direitos e garantias fundamentais (I)", "Artigo 5º: Direitos individuais (II)",
-      "Remédios: Habeas Corpus e Mandado de Segurança", "Remédios: Mandado de Injunção e Habeas Data",
-      "Controle Difuso de Constitucionalidade", "Controle Concentrado: Legitimidade ADI/ADC/ADPF",
-      "Efeitos das Decisões no Controle Concentrado", "Poder Judiciário: Competências do STF",
-      "Poder Judiciário: Competências do STJ", "Tribunais de Justiça e Conselho Nacional de Justiça",
-      "Súmulas Vinculantes do STF", "Administração Pública Constitucional (art. 37)"
+    // 1.2 Constitucional (Casas 16 a 27)
+    const constItens = [
+      { t: "Artigo 5º: Direitos e deveres individuais (I)", lei: `${URL_CF}#art5`, j: "artigo 5 CF STF jurisprudencia" },
+      { t: "Artigo 5º: Garantias fundamentais (II)", lei: `${URL_CF}#art5`, j: "garantias fundamentais sumula vinculante STF" },
+      { t: "Remédios: Habeas Corpus e Mandado de Segurança", lei: `${URL_CF}#art5lxviii`, j: "mandado de seguranca direito liquido e certo STJ STF" },
+      { t: "Remédios: Mandado de Injunção e Habeas Data", lei: `${URL_CF}#art5lxxi`, j: "mandado de injuncao eficacia STF" },
+      { t: "Controle Difuso e Reserva de Plenário", lei: `${URL_CF}#art97`, j: "sumula vinculante 10 reserva de plenario STF" },
+      { t: "Controle Concentrado: Legitimidade ADI/ADC/ADPF", lei: `${URL_CF}#art103`, j: "legitimidade ativa ADI pertinencia tematica STF" },
+      { t: "Efeitos Decisões Concentrado e Modulação", lei: `${URL_CF}#art102p2`, j: "modulacao de efeitos controle concentrado STF" },
+      { t: "Competências do Supremo Tribunal Federal", lei: `${URL_CF}#art102`, j: "competencia originaria STF jurisprudencia" },
+      { t: "Competências do Superior Tribunal de Justiça", lei: `${URL_CF}#art105`, j: "competencia recursal originaria STJ" },
+      { t: "Tribunais de Justiça e CNJ", lei: `${URL_CF}#art103b`, j: "competencia CNJ controle administrativo judiciario STF" },
+      { t: "Súmulas Vinculantes do STF", lei: `${URL_CF}#art103a`, j: "sumulas vinculantes stf aplicacao" },
+      { t: "Administração Constitucional (art. 37)", lei: `${URL_CF}#art37`, j: "artigo 37 cf concurso publico teto acumulacao STF" }
     ];
-    dirConst.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Constitucional", i: "📜", t }));
+    constItens.forEach(item => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Constitucional", i: "📜", t: item.t, leiUrl: item.lei, jurisUrl: linkJuris(item.j) }));
 
-    const dirAdm = [
-      "Lei 8.112/1990: Provimento e vacância", "Lei 8.112/1990: Direitos e deveres",
-      "Lei 8.112/1990: Regime disciplinar", "Lei 8.112/1990: Processo Administrativo Disciplinar",
-      "Licitações (Lei 14.133/2021): Modalidades e julgamento", "Licitações (Lei 14.133/2021): Dispensa e inexigibilidade",
-      "Contratos Administrativos (Lei 14.133/2021)", "Improbidade (Lei 8.429/1992): Dolo específico",
-      "Improbidade (Lei 8.429/1992): Espécies de atos e prescrição", "Atos Administrativos: Elementos e atributos",
-      "Atos Administrativos: Convalidação e anulação", "Responsabilidade Civil do Estado"
+    // 1.3 Administrativo (Casas 28 a 39)
+    const admItens = [
+      { t: "Lei 8.112/1990: Provimento e vacância", lei: `${URL_8112}#art8`, j: "provimento vacancia posse exercicio servidor publico STJ" },
+      { t: "Lei 8.112/1990: Direitos e deveres", lei: `${URL_8112}#art116`, j: "deveres proibicoes servidor publico sumula STJ" },
+      { t: "Lei 8.112/1990: Regime disciplinar", lei: `${URL_8112}#art127`, j: "demissao proporcionalidade servidor STJ STF" },
+      { t: "Lei 8.112/1990: PAD e ampla defesa", lei: `${URL_8112}#art143`, j: "sumula vinculante 5 sumula 592 STJ PAD" },
+      { t: "Licitações (Lei 14.133/2021): Modalidades", lei: `${URL_14133}#art28`, j: "modalidades licitacao 14133 TCU jurisprudencia" },
+      { t: "Licitações: Dispensa e inexigibilidade", lei: `${URL_14133}#art74`, j: "inexigibilidade dispensa 14133 TCU STJ" },
+      { t: "Contratos Administrativos (Lei 14.133/2021)", lei: `${URL_14133}#art89`, j: "alteracao contratual rescisao 14133 STJ" },
+      { t: "Improbidade: Exigência de dolo específico", lei: `${URL_8429}#art1`, j: "tema 1199 STF dolo improbidade administrativa" },
+      { t: "Improbidade: Atos ímprobos e prescrição", lei: `${URL_8429}#art9`, j: "prescricao improbidade administrativa 14230 STF" },
+      { t: "Atos Administrativos: Elementos e atributos", lei: `${URL_CF}#art37`, j: "atributos ato administrativo autoexecutoriedade presuncao" },
+      { t: "Atos: Convalidação e anulação", lei: "https://www.planalto.gov.br/ccivil_03/leis/l9784.htm#art53", j: "sumula 473 STF anulacao revogacao convalidacao ato" },
+      { t: "Responsabilidade Civil do Estado", lei: `${URL_CF}#art37p6`, j: "tema 130 STF responsabilidade civil estado omissao risco administrativo" }
     ];
-    dirAdm.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Administrativo", i: "🏛️", t }));
+    admItens.forEach(item => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Administrativo", i: "🏛️", t: item.t, leiUrl: item.lei, jurisUrl: linkJuris(item.j) }));
 
-    const procPen = [
-      "Prisão em Flagrante e custódia", "Prisão Preventiva no CPP", "Prisão Temporária (Lei 7.960/89)",
-      "Medidas Cautelares Alternativas (art. 319)", "Inquérito Policial e arquivamento",
-      "Acordo de Não Persecução Penal (ANPP)", "Provas: Teoria da prova ilícita", "Provas: Cadeia de custódia",
-      "Interceptação Telefônica (Lei 9.296/96)", "Tribunal do Júri: Decisão de pronúncia",
-      "Recursos Criminais: Apelação", "Recurso em Sentido Estrito (RESE)"
+    // 1.4 Processo Penal (Casas 40 a 51)
+    const procPenItens = [
+      { t: "Prisão em Flagrante e custódia", lei: `${URL_CPP}#art301`, j: "prisao flagrante audiencia de custodia STF STJ" },
+      { t: "Prisão Preventiva no CPP", lei: `${URL_CPP}#art312`, j: "requisitos prisao preventiva contemporaneidade STJ" },
+      { t: "Prisão Temporária (Lei 7.960/89)", lei: "https://www.planalto.gov.br/ccivil_03/leis/l7960.htm", j: "requisitos prisao temporaria ADI 4150 STF" },
+      { t: "Medidas Cautelares Alternativas", lei: `${URL_CPP}#art319`, j: "medidas cautelares diversas da prisao art 319 STJ" },
+      { t: "Inquérito Policial e arquivamento", lei: `${URL_CPP}#art4`, j: "arquivamento inquerito policial novo art 28 cpp STF" },
+      { t: "Acordo de Não Persecução Penal (ANPP)", lei: `${URL_CPP}#art28a`, j: "acordo nao persecucao penal ANPP STF retroatividade" },
+      { t: "Provas: Teoria da prova ilícita", lei: `${URL_CPP}#art157`, j: "provas ilicitas derivacao teoria frutos arvore envenenada STF" },
+      { t: "Provas: Cadeia de custódia", lei: `${URL_CPP}#art158a`, j: "quebra cadeia de custodia nulidade STJ" },
+      { t: "Interceptação Telefônica (Lei 9.296/96)", lei: "https://www.planalto.gov.br/ccivil_03/leis/l9296.htm", j: "interceptacao telefonica requisitos renovacoes sucessivas STF" },
+      { t: "Tribunal do Júri: Decisão de pronúncia", lei: `${URL_CPP}#art413`, j: "pronuncia tribunal do juri in dubio pro societate STJ STF" },
+      { t: "Recursos Criminais: Apelação", lei: `${URL_CPP}#art593`, j: "apelacao criminal efeito devolutivo sumula STJ" },
+      { t: "Recurso em Sentido Estrito (RESE)", lei: `${URL_CPP}#art581`, j: "recurso em sentido estrito hipoteses cabimento STJ" }
     ];
-    procPen.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Penal", i: "🔍", t }));
+    procPenItens.forEach(item => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Penal", i: "🔍", t: item.t, leiUrl: item.lei, jurisUrl: linkJuris(item.j) }));
 
-    const port = [
-      "Interpretação Textual e inferências", "Mecanismos de Coesão Referencial e Sequencial",
-      "Semântica e Significação Vocabular", "Concordância Verbal Cebraspe", "Concordância Nominal",
-      "Regência Verbal", "Regência Nominal e Crase", "Pontuação: Emprego da vírgula (termos)",
-      "Pontuação: Vírgula entre orações", "Reescrita de Frases: Sentido e gramática",
+    // 1.5 Português (Casas 52 a 65)
+    const ptItens = [
+      "Compreensão e Interpretação de Textos", "Mecanismos de Coesão Referencial e Sequencial",
+      "Semântica e Significação Vocabular", "Sintaxe de Concordância Verbal", "Sintaxe de Concordância Nominal",
+      "Regência Verbal", "Regência Nominal e Crase", "Pontuação: Vírgula entre termos",
+      "Pontuação: Vírgula entre orações", "Reescrita de Frases: Correção e sentido",
       "Colocação Pronominal", "Morfologia: Conjunções",
       "Revisão Integrada Cebraspe 1", "Revisão Integrada Cebraspe 2"
     ];
-    port.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Português", i: "📖", t }));
+    ptItens.forEach(t => boardData.push({
+      id: boardData.length + 1, z: "vermelha", d: "Português", i: "📖", t,
+      leiUrl: "https://www.planalto.gov.br/ccivil_03/decreto/2008/d6583.htm",
+      jurisUrl: linkJuris(`jurisprudencia cespe cebraspe portugues ${t}`)
+    }));
 
-    // 2. ZONA AMARELA (66-88)
-    const penal = [
-      "Teoria do Crime: Conduta, resultado e tipicidade", "Teoria do Crime: Dolo, culpa e tentativa",
-      "Excludentes de Ilicitude (art. 23)", "Culpabilidade e causas de exclusão",
-      "Aplicação da Pena: Critério trifásico", "Crimes contra a Administração Pública",
-      "Crimes contra o Patrimônio", "Legislação Penal Especial (Drogas, Maria da Penha, Hediondos)"
+    // 2. ZONA AMARELA (Casas 66 a 88)
+    // 2.1 Penal (Casas 66 a 73)
+    const penItens = [
+      { t: "Teoria do Crime: Conduta, resultado e tipicidade", lei: `${URL_CP}#art13`, j: "tipicidade insignificancia teoria da equivalencia STF" },
+      { t: "Teoria do Crime: Dolo, culpa e tentativa", lei: `${URL_CP}#art14`, j: "tentativa dolo eventual culpa consciente STJ" },
+      { t: "Excludentes de Ilicitude (art. 23)", lei: `${URL_CP}#art23`, j: "legitima defesa estrito cumprimento estado de necessidade STJ" },
+      { t: "Culpabilidade e causas de exclusão", lei: `${URL_CP}#art26`, j: "erro de proibicao coacao moral irresistivel inimputabilidade STJ" },
+      { t: "Aplicação da Pena: Critério trifásico", lei: `${URL_CP}#art59`, j: "dosimetria da pena sumula 444 sumula STJ" },
+      { t: "Crimes contra a Administração Pública", lei: `${URL_CP}#art312`, j: "peculato corrupcao concussao prevaricacao STJ" },
+      { t: "Crimes contra o Patrimônio", lei: `${URL_CP}#art155`, j: "furto roubo estelionato sumula 582 STJ" },
+      { t: "Legislação Penal Especial", lei: "https://www.planalto.gov.br/ccivil_03/_ato2004-2006/2006/lei/l11343.htm", j: "lei de drogas maria da penha hediondos sumula STJ STF" }
     ];
-    penal.forEach(t => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Penal", i: "🎯", t }));
+    penItens.forEach(item => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Penal", i: "🎯", t: item.t, leiUrl: item.lei, jurisUrl: linkJuris(item.j) }));
 
-    const civil = [
-      "LINDB e Parte Geral", "Personalidade, capacidade, prescrição e decadência",
-      "Obrigações: Inadimplemento e mora", "Teoria Geral dos Contratos",
-      "Direitos Reais: Posse e usucapião", "Família e Sucessões",
-      "Código de Defesa do Consumidor", "Lei de Locações (Lei 8.245/1991)"
+    // 2.2 Direito Civil (Casas 74 a 81)
+    const civItens = [
+      { t: "LINDB: Segurança jurídica (arts. 20 a 30)", lei: "https://www.planalto.gov.br/ccivil_03/decreto-lei/del4657compilado.htm#art20", j: "lindb artigos 20 a 30 seguranca juridica STJ STF" },
+      { t: "Parte Geral: Personalidade, capacidade e prescrição", lei: `${URL_CC}#art1`, j: "prescricao decadencia capacidade civil STJ" },
+      { t: "Obrigações: Inadimplemento, mora e cláusula penal", lei: `${URL_CC}#art389`, j: "inadimplemento obrigacoes clausula penal arras STJ" },
+      { t: "Teoria Geral dos Contratos", lei: `${URL_CC}#art421`, j: "boa fe objetiva funcao social contrato STJ" },
+      { t: "Direitos Reais: Posse e usucapião", lei: `${URL_CC}#art1196`, j: "posse usucapiao sumula STJ direitos reais" },
+      { t: "Família e Sucessões: Regimes e vocação", lei: `${URL_CC}#art1639`, j: "regime de bens uniao estavel sucessao conjuge STF tema 809" },
+      { t: "Código de Defesa do Consumidor", lei: "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#art12", j: "sumula CDC responsabilidade fato vicio STJ" },
+      { t: "Lei de Locações (Lei 8.245/1991)", lei: "https://www.planalto.gov.br/ccivil_03/leis/l8245.htm", j: "lei do inquilinato despejo fiador penhora sumula STJ" }
     ];
-    civil.forEach(t => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Civil", i: "🏢", t }));
+    civItens.forEach(item => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Civil", i: "🏢", t: item.t, leiUrl: item.lei, jurisUrl: linkJuris(item.j) }));
 
-    const tjdft = [
-      "Regimento TJDFT: Tribunal Pleno", "Regimento TJDFT: Conselho e Câmaras",
-      "Lei 11.697/2008: Organização Judiciária DF", "Lei 11.697/2008: Varas e Juizados",
-      "Provimento Geral da Corregedoria TJDFT", "Provimento do PJe no TJDFT",
-      "Simulado da Legislação Específica TJDFT"
+    // 2.3 Legislação TJDFT (Casas 82 a 88)
+    const tjdftItens = [
+      { t: "Regimento TJDFT: Tribunal Pleno", lei: URL_TJDFT_LEG, j: "regimento interno pleno competencias TJDFT" },
+      { t: "Regimento TJDFT: Conselho e Câmaras", lei: URL_TJDFT_LEG, j: "conselho da magistratura camaras julgadoras TJDFT" },
+      { t: "Lei 11.697/2008: Organização Judiciária DF", lei: "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2008/lei/l11697.htm#art1", j: "organizacao judiciaria competencia varas civeis TJDFT" },
+      { t: "Lei 11.697/2008: Varas Fazenda e Juizados", lei: "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2008/lei/l11697.htm#art26", j: "competencia fazenda publica juizados especiais fazendarios TJDFT" },
+      { t: "Provimento Geral da Corregedoria TJDFT", lei: URL_TJDFT_LEG, j: "provimento geral corregedoria prazos mandados TJDFT" },
+      { t: "Provimento do PJe no TJDFT", lei: URL_TJDFT_LEG, j: "processo judicial eletronico provimento TJDFT" },
+      { t: "Simulado da Legislação Específica TJDFT", lei: URL_TJDFT_LEG, j: "questoes legislacao interna tjdft jurisprudencia" }
     ];
-    tjdft.forEach(t => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Legislação TJDFT", i: "🏛️", t }));
+    tjdftItens.forEach(item => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Legislação TJDFT", i: "🏛️", t: item.t, leiUrl: item.lei, jurisUrl: linkJuris(item.j) }));
 
-    // 3. ZONA VERDE (89-100)
-    const verde = [
-      { d: "Civil/Empresarial", i: "💼", t: "Direito de Empresa e Sociedades" },
-      { d: "Leis Especiais", i: "📋", t: "Registros Públicos e Parcelamento do Solo" },
-      { d: "Constitucional", i: "📘", t: "Teoria Constitucional e Poder Constituinte" },
-      { d: "Ética", i: "🛡️", t: "Ética Pública e Código de Ética do TJDFT" },
-      { d: "Processo", i: "📑", t: "Processos Incidentes e Restauração de Autos" },
-      { d: "Simulado 1", i: "⭐", t: "Simulado Integrado da Zona Vermelha" },
-      { d: "Simulado 2", i: "⭐", t: "Simulado Integrado da Zona Amarela" },
-      { d: "Jurisprudência", i: "💎", t: "Revisão Geral de Súmulas Vinculantes STF/STJ" },
-      { d: "Reta Final", i: "🔥", t: "Simulado Cebraspe TJDFT (Parte 1)" },
-      { d: "Reta Final", i: "🔥", t: "Simulado Cebraspe TJDFT (Parte 2)" },
-      { d: "Véspera", i: "🎯", t: "Revisão de Letra de Lei Seca" },
-      { d: "Casa da Posse", i: "👑", t: "CASA 100: Grande Simulado Final da Posse!" }
+    // 3. ZONA VERDE (Casas 89 a 100)
+    const verdeItens = [
+      { d: "Civil/Empresarial", i: "💼", t: "Direito de Empresa e Sociedades", lei: `${URL_CC}#art966`, j: "desconsideracao personalidade juridica sociedade limitada STJ" },
+      { d: "Leis Especiais", i: "📋", t: "Registros Públicos e Parcelamento do Solo", lei: "https://www.planalto.gov.br/ccivil_03/leis/l6015compilada.htm", j: "registros publicos retificacao imobiliaria STJ" },
+      { d: "Constitucional", i: "📘", t: "Teoria Constitucional e Poder Constituinte", lei: URL_CF, j: "poder constituinte originario derivado limites STF" },
+      { d: "Ética", i: "🛡️", t: "Ética Pública e Código de Ética do TJDFT", lei: URL_TJDFT_LEG, j: "codigo de etica comissao de etica TJDFT" },
+      { d: "Processo", i: "📑", t: "Processos Incidentes e Restauração de Autos", lei: `${URL_CPC}#art712`, j: "restauracao de autos procedimento CPC" },
+      { d: "Simulado 1", i: "⭐", t: "Simulado Integrado da Zona Vermelha", lei: URL_CPC, j: "simulado cebraspe tjdft zona vermelha" },
+      { d: "Simulado 2", i: "⭐", t: "Simulado Integrado da Zona Amarela", lei: URL_CP, j: "simulado cebraspe tjdft zona amarela" },
+      { d: "Jurisprudência", i: "💎", t: "Revisão Geral de Súmulas Vinculantes STF/STJ", lei: `${URL_CF}#art103a`, j: "sumulas vinculantes stf completas enunciados" },
+      { d: "Reta Final", i: "🔥", t: "Simulado Cebraspe TJDFT (Parte 1)", lei: URL_CPC, j: "questoes analista judiciario tjdft cebraspe" },
+      { d: "Reta Final", i: "🔥", t: "Simulado Cebraspe TJDFT (Parte 2)", lei: URL_CPP, j: "questoes comentadas tjdft cebraspe analista" },
+      { d: "Véspera", i: "🎯", t: "Revisão de Letra de Lei Seca", lei: URL_CF, j: "principais artigos lei seca concurso tjdft" },
+      { d: "Casa da Posse", i: "👑", t: "CASA 100: Grande Simulado Final da Posse!", lei: URL_TJDFT_LEG, j: "tjdft posse nomeacao aprovacao cebraspe" }
     ];
-    verde.forEach(obj => boardData.push({ id: boardData.length + 1, z: "verde", d: obj.d, i: obj.i, t: obj.t }));
+    verdeItens.forEach(item => boardData.push({ id: boardData.length + 1, z: "verde", d: item.d, i: item.i, t: item.t, leiUrl: item.lei, jurisUrl: linkJuris(item.j) }));
 
     // Preenchimento provisório das questões
     boardData.forEach(item => {
@@ -740,10 +764,9 @@
       badge.innerText = `Zona ${item.z}`;
       badge.className = `badge-zona b-${item.z}`;
 
-      // Configura os Links da Casa
-      const links = legalLinks[item.d] || legalLinks["default"];
-      document.getElementById("linkLeiSeca").href = links.lei;
-      document.getElementById("linkJuris").href = links.juris;
+      // Configura os links com artigo exato e busca de jurisprudência
+      document.getElementById("linkLeiSeca").href = item.leiUrl;
+      document.getElementById("linkJuris").href = item.jurisUrl;
 
       const isDone = concluidas.includes(item.id);
       const btnAction = document.getElementById("btnAction");
