@@ -1,56 +1,112 @@
-export default {
-  id: 1,
-  questions: [
-    {
-      q: "Texto: 'A incorporação de novas tecnologias no setor público deixou de ser uma mera tendência para se tornar uma necessidade imperativa...'\n\n[CESPE - UNEAL - Analista Jurídico]\nJulgue o item:\nQuanto à tipologia, o texto classifica-se como predominantemente injuntivo, pois orienta o leitor acerca dos procedimentos necessários para a implementação da IA na administração pública.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O texto é predominantemente dissertativo-argumentativo; expõe a realidade da IA e defende a necessidade de compatibilizá-la com o devido processo legal e a segurança jurídica. Não é injuntivo (não apresenta comandos, prescrições ou instruções de procedimento passo a passo)."
-    },
-    {
-      q: "Texto: 'Césio-137: acidente em Goiânia deixou lições que continuam orientando a proteção a trabalhadores expostos à radiação...'\n\n[Quadrix - CONTER - Analista/Advogado]\nJulgue o item:\nO texto é predominantemente injuntivo, uma vez que apresenta orientações acerca da proteção de profissionais expostos à radiação.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O texto possui natureza expositivo-informativa/jornalística, narrando fatos históricos e decisões institucionais tomadas após o acidente de 1987, sem estrutura injuntiva de instrução direta ao leitor."
-    },
-    {
-      q: "Texto: 'Existem três questões abertas em ciência que dividem uma temática única: a questão das origens...'\n\n[CESPE - ARSAL - Analista de Regulação]\nJulgue o item:\nEmbora o texto se inicie com característica da tipologia expositivo-argumentativa, ele se desenvolve como predominantemente opinativo, o que se comprova pelo emprego dos adjetivos \"fascinantes\", \"interessantes\" e \"maravilhosas\" e pelo uso da primeira pessoa do discurso em diversas passagens.",
-      a: "E",
-      exp: "Gabarito: ERRADO. Trata-se de um ensaio de divulgação científica de base reflexiva e expositiva. O emprego pontual de adjetivos e o uso da 1ª pessoa refletem o estilo autoral do autor, sem torná-lo predominantemente opinativo."
-    },
-    {
-      q: "Texto: 'Existem três questões abertas em ciência que dividem uma temática única: a questão das origens...'\n\n[CESPE - ARSAL - Analista de Regulação]\nJulgue o item:\nPara atingir seu propósito comunicativo, o autor do texto o constrói com base nas tipologias textuais descritiva e narrativa.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O texto apoia-se nas tipologias expositiva e argumentativa (discussão, exposição e reflexão conceitual sobre teorias científicas), e não na narração cronológica ou na descrição sensorial de cenários."
-    },
-    {
-      q: "Texto: 'A regulação e a fiscalização dos serviços públicos de abastecimento de água e de esgotamento sanitário são fundamentais...'\n\n[CESPE - ARSAL - Analista de Regulação - Direito]\nJulgue o item:\nNo último parágrafo do texto, predomina a tipologia informativa.",
-      a: "C",
-      exp: "Gabarito: CERTO. O último parágrafo limita-se a transmitir dados e explicar a divisão de competências operacionais entre a CASAL, as concessionárias e os municípios, caracterizando tipologia estritamente informativa/expositiva."
-    },
-    {
-      q: "Texto: 'Para um governo ser bem-sucedido, é necessário que tenha legitimidade...'\n\n[CESPE - SEPLAG-AL - Gestão Pública]\nJulgue o item:\nObserva-se no texto a predominância da tipologia expositiva, focada na transmissão de informações de forma objetiva, o que afasta traços de subjetividade ou defesa de pontos de vista pessoais.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O texto é dissertativo-argumentativo: o autor sustenta uma tese consistente sobre a necessidade de legitimidade substantiva e a eficácia na entrega de serviços públicos pelo Estado perante os cidadãos."
-    },
-    {
-      q: "Texto: 'Segundo estimativa apresentada em 2020 pela Forbes Finance Council, em 2050, mais de 68% da população mundial deverão viver em ambiente urbano...'\n\n[CESPE - SEPLAG-AL - Gestão Pública]\nJulgue o item:\nCombinam-se no texto elementos textuais predominantemente argumentativos e descritivos.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O texto combina elementos expositivos (dados demográficos e econômicos) com argumentos propositivos (necessidade de posicionamento ativo do Brasil em cidades inteligentes), inexistindo predominância descritiva."
-    },
-    {
-      q: "Texto: 'Conselhos de fiscalização profissional e proteção da sociedade...'\n\n[Quadrix - CREFONO 2-SP - Analista]\nJulgue o item:\nQuanto à tipologia textual, o fragmento \"Portanto, cabe à população e aos profissionais entender e defender o papel fundamental dos conselhos...\" caracteriza-se como predominantemente injuntivo, uma vez que a sua estrutura tem o objetivo principal de instruir e ordenar o comportamento da população e dos profissionais.",
-      a: "E",
-      exp: "Gabarito: ERRADO. A frase representa o fechamento conclusivo de uma dissertação argumentativa (marcada pela conjunção conclusiva 'Portanto'), funcionando como tese/exortação final, e não como comando injuntivo ou instrucional."
-    },
-    {
-      q: "Texto: 'O agrupamento das pessoas em classes sociais não é, ao contrário do que alguns pensam, apenas uma decisão técnica como outra qualquer...'\n\n[CESPE - FUNPRESP-JUD - Analista]\nJulgue o item:\nQuanto à tipologia, o texto classifica-se como injuntivo, pois instrui o leitor a realizar pesquisa sobre as diversas implicações do agrupamento de pessoas em classes sociais.",
-      a: "E",
-      exp: "Gabarito: ERRADO. O autor propõe um raciocínio/exercício mental hipotético como recurso didático para fundamentar sua argumentação política e sociológica; a tipologia predominante é dissertativa-argumentativa, e não injuntiva."
-    },
-    {
-      q: "Texto: 'Dia do Ouvidor: COFFITO destaca escuta ativa na gestão pública...'\n\n[Quadrix - CREFITO 17ª Região - Advogado]\nJulgue o item:\nEmbora o texto \"Dia do Ouvidor: COFFITO destaca escuta ativa na gestão pública\" apresente informações e dados objetivos, ele não se caracteriza como dissertativo-argumentativo, pois não desenvolve tese com a defesa sistemática por meio de argumentos organizados.",
-      a: "C",
-      exp: "Gabarito: CERTO. Trata-se de uma notícia jornalística institucional que faz a cobertura de um evento comemorativo, sem o desenvolvimento sistemático de tese própria da dissertação argumentativa."
-    }
-  ]
-};
-
+[
+  {
+    "id": "Q4234106",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Teoria Geral dos Recursos",
+    "banca": "CEBRASPE",
+    "ano": 2026,
+    "enunciado": "Uma instituição caracterizada como pessoa jurídica de direito público é parte em diferentes demandas judiciais relacionadas à contratação de serviços e gestão de recursos públicos, ajuizadas ou impetradas por cidadãos e órgãos de controle.\n\nJulgue o item seguinte, quanto às normas processuais pertinentes a essa situação hipotética e aos instrumentos de controle judicial da Administração Pública.\n\nContra decisões proferidas em processos judiciais é possível a interposição de recursos, cuja finalidade pode ser reformar, invalidar, esclarecer ou integrar decisões.",
+    "tipo": "certo_errado",
+    "gabarito": "C"
+  },
+  {
+    "id": "Q4250780",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Requisitos de Admissibilidade / Apelação",
+    "banca": "CEBRASPE",
+    "ano": 2026,
+    "enunciado": "Julgue o item a seguir, relativo à preclusão, aos meios de impugnação das decisões judiciais, a jurisdição, às condições da ação e a pressupostos processuais.\n\nA apelação interposta após o prazo legal é intempestiva e configura vício insanável decorrente de preclusão consumativa, o que impede o conhecimento do recurso.",
+    "tipo": "certo_errado",
+    "gabarito": "E"
+  },
+  {
+    "id": "Q4146545",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Apelação / Cumprimento de Sentença",
+    "banca": "Quadrix",
+    "ano": 2026,
+    "enunciado": "Com base nessa situação hipotética, julgue o item seguinte, a respeito do regime recursal e executivo no CPC, bem como do processo judicial eletrônico.\n\nAo ser interposta a apelação, a autarquia terá 15 dias úteis de prazo para as contrarrazões.",
+    "tipo": "certo_errado",
+    "gabarito": "E"
+  },
+  {
+    "id": "Q3886790",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Apelação no Processo Civil",
+    "banca": "CEBRASPE",
+    "ano": 2026,
+    "enunciado": "Uma sociedade empresária ajuizou ação de cobrança contra seu ex-fornecedor, com os seguintes pedidos: (i) pagamento de multa contratual por descumprimento de exclusividade; (ii) indenização por lucros cessantes; e (iii) ressarcimento por danos emergentes.\nEm contestação, o réu suscitou preliminar de convenção de arbitragem e, no mérito, impugnou os pedidos formulados na petição inicial.\nNa decisão saneadora, o juízo de primeiro grau rejeitou a alegação de convenção de arbitragem feita pelo réu e indeferiu a produção de prova pericial contábil requerida pela autora para demonstração dos lucros cessantes, ao fundamento de que a prova documental era suficiente para a formação de sua convicção. Não houve agravo de instrumento. Na sentença, a magistrada julgou parcialmente procedente a demanda e condenou o réu apenas ao pagamento da multa contratual.\nInconformada, a autora apelou, tendo sustentado cerceamento de defesa pelo indeferimento da perícia e requereu a reforma da sentença quanto aos pedidos rejeitados. Durante o julgamento da apelação, o relator identificou que a sentença deixara de se pronunciar sobre o pedido de ressarcimento por danos emergentes, tendo-se limitado a rejeitar os lucros cessantes.\nO processo conta com farta documentação sobre as questões debatidas e o réu não apresentou recurso adesivo.\n\nConsiderando a situação hipotética apresentada, julgue o seguinte item.\n\nAo apreciar o recurso de apelação, o tribunal não poderá conhecer da questão relativa ao indeferimento da prova pericial, em razão da preclusão, devendo limitar-se a julgar o pedido de danos emergentes, omitido na sentença, com base no efeito translativo do recurso.",
+    "tipo": "certo_errado",
+    "gabarito": "E"
+  },
+  {
+    "id": "Q3886791",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Apelação no Processo Civil",
+    "banca": "CEBRASPE",
+    "ano": 2026,
+    "enunciado": "Considerando a situação hipotética apresentada, julgue o seguinte item.\n\nO tribunal deverá determinar a baixa dos autos ao juízo de origem para que este profira decisão complementar sobre os danos emergentes, pois a omissão quanto a pedido formulado na inicial configura sentença citra petita, que não pode ser suprida diretamente pelo órgão revisor sem violação ao duplo grau de jurisdição.",
+    "tipo": "certo_errado",
+    "gabarito": "E"
+  },
+  {
+    "id": "Q3685839",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Teoria Geral dos Recursos",
+    "banca": "Quadrix",
+    "ano": 2025,
+    "enunciado": "Acerca do Código de Processo Civil, julgue o item a seguir, quanto à preclusão, aos atos processuais, à nulidade, à tutela provisória, ao processo de conhecimento, à produção de provas, ao processo de execução, aos processos nos tribunais e aos meios de impugnação das decisões judiciais.\n\nAs matérias de ordem pública estão sujeitas à preclusão pro judicato, razão pela qual não podem ser revisitadas se já tiverem sido objeto de anterior manifestação jurisdicional.",
+    "tipo": "certo_errado",
+    "gabarito": "C"
+  },
+  {
+    "id": "Q3582955",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Teoria Geral dos Recursos",
+    "banca": "CEBRASPE",
+    "ano": 2025,
+    "enunciado": "Em ação indenizatória ajuizada por Maria, vítima do compartilhamento não autorizado de imagens íntimas suas em um aplicativo de mensagens, o tribunal estadual reconheceu a responsabilidade civil da empresa provedora do serviço, que, embora tenha sido devidamente notificada administrativamente para proceder à remoção do conteúdo, permaneceu inerte sob a alegação de impossibilidade técnica em razão da criptografia de ponta a ponta presente no referido aplicativo. Inconformada, a empresa interpôs recurso especial ao STJ.\n\nCom base no caso hipotético precedente, julgue o item que se segue.\n\nA desistência do recurso interposto pela empresa pode ser homologada a qualquer tempo, independentemente da concordância da parte contrária, podendo ele ser indeferido quando houver indício de uso de mera estratégia processual para se evitar a formação de jurisprudência contrária aos interesses da empresa recorrente.",
+    "tipo": "certo_errado",
+    "gabarito": "C"
+  },
+  {
+    "id": "Q3215480",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Apelação no Processo Civil",
+    "banca": "CEBRASPE",
+    "ano": 2025,
+    "enunciado": "Acerca de medidas cautelares, sentença, coisa julgada e recursos no processo civil, julgue o item que se segue.\n\nConsidere que um recurso de apelação tenha sido inadmitido monocraticamente no tribunal sob a justificativa de ter sido interposto fora do prazo legal, tendo o relator verificado a falta de comprovação da ocorrência de feriado para a aferição da tempestividade recursal, embora o recorrente a tivesse alegado. Nessa situação hipotética, o relator agiu corretamente, por se tratar de vício insanável.",
+    "tipo": "certo_errado",
+    "gabarito": "E"
+  },
+  {
+    "id": "Q3231168",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Apelação no Processo Civil",
+    "banca": "CEBRASPE",
+    "ano": 2025,
+    "enunciado": "Acerca dos meios judiciais de impugnação de decisões, julgue o seguinte item.\n\nCompete ao juízo a quo o exame de admissibilidade da apelação, razão por que lhe é facultada a retratação nos casos de improcedência liminar do pedido.",
+    "tipo": "certo_errado",
+    "gabarito": "E"
+  },
+  {
+    "id": "Q2507807",
+    "casa": 1,
+    "materia": "Direito Processual Civil",
+    "topico": "Teoria Geral dos Recursos",
+    "banca": "Quadrix",
+    "ano": 2024,
+    "enunciado": "Em relação ao sistema recursal, julgue o item seguinte.\n\nÉ possível conceituar os recursos como meio ou instrumento destinado a provocar o reexame da decisão judicial, que dá origem a uma nova relação processual, com a finalidade de obter-lhe a invalidação, a reforma, o esclarecimento ou a integração.",
+    "tipo": "certo_errado",
+    "gabarito": "E"
+  }
+]
