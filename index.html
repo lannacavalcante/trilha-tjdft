@@ -3,17 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Trilha da Posse TJDFT - Estratégica</title>
+  <title>Trilha da Posse TJDFT - Estratégica Avançada</title>
   <style>
     :root {
       --bg: #0b0f19;
       --card-bg: #131b2e;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      
-      --zona-vermelha: #ef4444;
-      --zona-amarela: #eab308;
-      --zona-verde: #10b981;
     }
 
     * {
@@ -136,6 +132,7 @@
     .btn-load { background: #475569; }
     .btn-reset { background: #dc2626; }
     .btn-guide { background: #059669; }
+    .btn-errors { background: #d97706; }
 
     .board-grid {
       width: 100%;
@@ -166,24 +163,25 @@
       transform: scale(0.92);
     }
 
-    .tile.zona-vermelha {
-      border-color: rgba(239, 68, 68, 0.7);
-      background: rgba(239, 68, 68, 0.12);
-    }
+    .tile.zona-vermelha { border-color: rgba(239, 68, 68, 0.6); background: rgba(239, 68, 68, 0.1); }
+    .tile.zona-amarela { border-color: rgba(234, 179, 8, 0.6); background: rgba(234, 179, 8, 0.1); }
+    .tile.zona-verde { border-color: rgba(16, 185, 129, 0.6); background: rgba(16, 185, 129, 0.1); }
 
-    .tile.zona-amarela {
-      border-color: rgba(234, 179, 8, 0.7);
-      background: rgba(234, 179, 8, 0.12);
-    }
-
-    .tile.zona-verde {
-      border-color: rgba(16, 185, 129, 0.7);
-      background: rgba(16, 185, 129, 0.12);
-    }
-
-    .tile.concluido {
-      background: linear-gradient(135deg, rgba(16,185,129,0.3), rgba(5,150,105,0.6)) !important;
+    /* Sinalizadores de Retenção */
+    .tile.score-high {
       border-color: #10b981 !important;
+      background: rgba(16, 185, 129, 0.28) !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5) !important;
+    }
+    .tile.score-mid {
+      border-color: #eab308 !important;
+      background: rgba(234, 179, 8, 0.28) !important;
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.5) !important;
+    }
+    .tile.score-low {
+      border-color: #ef4444 !important;
+      background: rgba(239, 68, 68, 0.32) !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6) !important;
     }
 
     .tile.concluido::after {
@@ -263,6 +261,33 @@
       line-height: 1.4;
     }
 
+    /* Links Jurídicos */
+    .links-box {
+      display: flex;
+      gap: 8px;
+      margin-top: -4px;
+    }
+
+    .btn-link-legal {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .btn-link-legal:hover {
+      background: #334155;
+    }
+
     .quiz-box {
       background: #0f172a;
       border: 1px solid #334155;
@@ -323,15 +348,22 @@
     .quiz-feedback.success { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #a7f3d0; }
     .quiz-feedback.danger { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fecaca; }
 
-    .plan-card {
-      font-size: 0.8rem;
-      line-height: 1.45;
-      color: #cbd5e1;
+    .error-item {
       background: #0f172a;
-      padding: 12px;
-      border-radius: 10px;
       border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 12px;
       margin-bottom: 10px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .error-item-tag {
+      font-size: 0.7rem;
+      color: #f87171;
+      font-weight: 800;
+      margin-bottom: 4px;
+      text-transform: uppercase;
     }
   </style>
 </head>
@@ -339,7 +371,7 @@
 
   <header>
     <h1>TRILHA DA POSSE TJDFT</h1>
-    <p class="sub">100 Casas Temáticas • Organização por Prioridade e Relevância ⚖️✨</p>
+    <p class="sub">100 Casas • Retenção Ativa • Lei Seca & Jurisprudência ⚖️✨</p>
 
     <div class="panel">
       <div class="progress-bar">
@@ -358,6 +390,7 @@
       </div>
 
       <div class="actions">
+        <button class="btn-errors" id="btnCadernoErros">📓 Caderno de Erros (<span id="txtTotalErros">0</span>)</button>
         <button class="btn-guide" id="btnPlano">📋 Plano 90%</button>
         <button class="btn-save" id="btnSalvar">💾 Backup</button>
         <button class="btn-load" id="btnCarregar">📂 Carregar</button>
@@ -384,6 +417,12 @@
       </div>
 
       <div id="modalTopic" class="modal-topic"></div>
+
+      <!-- Links Diretos: Lei Seca e Jurisprudência -->
+      <div class="links-box">
+        <a id="linkLeiSeca" class="btn-link-legal" href="#" target="_blank">📖 Consultar Lei Seca</a>
+        <a id="linkJuris" class="btn-link-legal" href="#" target="_blank">⚖️ Consultar Jurisprudência / Súmulas</a>
+      </div>
 
       <div class="quiz-box">
         <div class="quiz-nav">
@@ -412,196 +451,180 @@
     </div>
   </div>
 
-  <!-- Modal do Plano 90% -->
+  <!-- Modal Caderno de Erros -->
+  <div id="modalErros" class="modal-overlay">
+    <div class="modal-card">
+      <h2 style="font-size:1.15rem; color:#f59e0b;">📓 Caderno de Erros Registrados</h2>
+      <p style="font-size:0.75rem; color:#94a3b8;">Revise abaixo todos os itens respondidos incorretamente na trilha:</p>
+      
+      <div id="listaErros" style="display:flex; flex-direction:column; gap:8px; max-height:60vh; overflow-y:auto; padding-right:4px;"></div>
+
+      <button id="btnCloseErros" style="background:#475569; align-self:flex-end;">Fechar Caderno</button>
+    </div>
+  </div>
+
+  <!-- Modal Plano 90% -->
   <div id="modalPlan" class="modal-overlay">
     <div class="modal-card">
       <h2 style="font-size:1.15rem; color:#10b981;">🎯 Plano para Atingir 90% de Rendimento</h2>
-      
-      <div class="plan-card">
+      <div style="background:#0f172a; padding:12px; border-radius:10px; border:1px solid #334155; font-size:0.8rem; line-height:1.45; color:#cbd5e1;">
         <strong>1. Distribuição de Carga Horária:</strong><br>
-        • <strong>70% do tempo:</strong> Zona Vermelha (Casas 1 a 65)<br>
-        • <strong>20% do tempo:</strong> Zona Amarela (Casas 66 a 88)<br>
-        • <strong>10% do tempo:</strong> Zona Verde (Casas 89 a 100)
+        • 70% Zona Vermelha (Casas 1 a 65)<br>
+        • 20% Zona Amarela (Casas 66 a 88)<br>
+        • 10% Zona Verde (Casas 89 a 100)<br><br>
+        <strong>2. Revisão por Cores:</strong><br>
+        Casas com borda vermelha (&lt;50%) devem ser refeitas imediatamente junto à lei seca.<br><br>
+        <strong>3. Caderno de Erros:</strong><br>
+        Abra o Caderno de Erros no topo antes de encerrar o dia de estudos para sanar as dúvidas recorrentes.
       </div>
-
-      <div class="plan-card">
-        <strong>2. Estudo da Legislação Seca:</strong><br>
-        Leitura diária e repetitiva dos artigos prioritários do CPC, CF/88, Lei 8.112/90, Lei 14.133/21, Lei 8.429/92 e Legislação do TJDFT.
-      </div>
-
-      <div class="plan-card">
-        <strong>3. Jurisprudência:</strong><br>
-        Memorização integral das Súmulas Vinculantes e Súmulas do STJ/STF em Direito Civil, Processo Civil, Penal e Constitucional.
-      </div>
-
-      <div class="plan-card">
-        <strong>4. Resolução Massiva:</strong><br>
-        Resolução diária das 10 questões Cebraspe por casa, repetindo os itens com erro para zerar as dúvidas sobre a letra de lei.
-      </div>
-
       <button id="btnClosePlan" style="background:#475569; align-self:flex-end;">Fechar Guia</button>
     </div>
   </div>
 
   <script>
-    // Configuração das 100 casas organizadas estritamente pelas Zonas
     const boardData = [];
 
-    // 1. ZONA VERMELHA (~65% da trilha: Casas 1 a 65)
-    // 1.1 Processo Civil (Casas 1 a 15)
-    const procCivTopicos = [
-      "Recursos: Apelação e regras gerais dos recursos",
-      "Recursos: Agravo de Instrumento (art. 1.015 do CPC e taxatividade mitigada)",
-      "Recursos: Embargos de Declaração e efeitos infringentes",
-      "Tutela Provisória de Urgência: Antecipada e Cautelar",
-      "Tutela de Evidência e suas hipóteses no CPC",
-      "Procedimento Comum: Petição inicial e indeferimento",
-      "Procedimento Comum: Improcedência liminar do pedido",
-      "Procedimento Comum: Contestação e Reconvenção",
-      "Procedimento Comum: Revelia e seus efeitos práticos",
-      "Atos Processuais: Contagem de prazos em dias úteis e preclusão",
-      "Atos Processuais: Citações e intimações no CPC",
-      "Atos Processuais: Regime de nulidades processuais",
-      "Cumprimento de Sentença: Impugnação e regras de penhora",
-      "Execução: Títulos executivos judiciais e extrajudiciais",
-      "Precedentes: IRDR, IAC e Reclamação Constitucional"
-    ];
-    procCivTopicos.forEach((t, i) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Civil", i: "⚖️", t }));
+    // Mapeamento de Links por Matéria
+    const legalLinks = {
+      "Processo Civil": {
+        lei: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13105.htm",
+        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
+      },
+      "Constitucional": {
+        lei: "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+        juris: "https://jurisprudencia.stf.jus.br/pages/search"
+      },
+      "Administrativo": {
+        lei: "https://www.planalto.gov.br/ccivil_03/leis/l8112cons.htm",
+        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
+      },
+      "Processo Penal": {
+        lei: "https://www.planalto.gov.br/ccivil_03/decreto-lei/del3689.htm",
+        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
+      },
+      "Português": {
+        lei: "https://www.planalto.gov.br/ccivil_03/decreto/2008/d6583.htm",
+        juris: "https://www.google.com/search?q=portugues+cebraspe+regras"
+      },
+      "Direito Penal": {
+        lei: "https://www.planalto.gov.br/ccivil_03/decreto-lei/del2848compilado.htm",
+        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
+      },
+      "Direito Civil": {
+        lei: "https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm",
+        juris: "https://scon.stj.jus.br/SCON/pesquisa.jsp"
+      },
+      "Legislação TJDFT": {
+        lei: "https://www.tjdft.jus.br/institucional/regimento-interno-e-legislacao",
+        juris: "https://pesquisajuris.tjdft.jus.br/IndexadorAcordaos-web/sistj"
+      },
+      "default": {
+        lei: "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+        juris: "https://jurisprudencia.stf.jus.br/pages/search"
+      }
+    };
 
-    // 1.2 Direito Constitucional (Casas 16 a 27)
-    const constTopicos = [
-      "Artigo 5º: Direitos e deveres individuais e coletivos (Parte 1)",
-      "Artigo 5º: Direitos individuais e garantias fundamentais (Parte 2)",
-      "Remédios Constitucionais: Habeas Corpus e Mandado de Segurança",
-      "Remédios Constitucionais: Mandado de Injunção e Habeas Data",
-      "Controle Difuso de Constitucionalidade e Cláusula de Reserva de Plenário",
-      "Controle Concentrado: Legitimidade ativa para ADI, ADC e ADPF",
-      "Efeitos das decisões em ADI, ADC, ADPF e modulação de efeitos",
-      "Poder Judiciário: Competências do Supremo Tribunal Federal (STF)",
-      "Poder Judiciário: Competências do Superior Tribunal de Justiça (STJ)",
-      "Poder Judiciário: Tribunais de Justiça e Conselho Nacional de Justiça (CNJ)",
-      "Poder Judiciário: Súmulas Vinculantes e seus efeitos vinculantes",
-      "Administração Constitucional: Acesso a cargos, acumulação e estabilidade"
+    // 1. ZONA VERMELHA (1-65)
+    const procCiv = [
+      "Recursos: Apelação e regras gerais", "Recursos: Agravo de Instrumento (art. 1.015 do CPC)",
+      "Recursos: Embargos de Declaração", "Tutela Provisória: Urgência Antecipada e Cautelar",
+      "Tutela de Evidência", "Procedimento Comum: Petição inicial e indeferimento",
+      "Procedimento Comum: Improcedência liminar", "Procedimento Comum: Contestação e Reconvenção",
+      "Procedimento Comum: Revelia e efeitos", "Atos Processuais: Prazos em dias úteis",
+      "Atos Processuais: Citações e intimações", "Atos Processuais: Nulidades",
+      "Cumprimento de Sentença e penhora", "Execução: Títulos executivos", "Precedentes: IRDR, IAC e Reclamação"
     ];
-    constTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Constitucional", i: "📜", t }));
+    procCiv.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Civil", i: "⚖️", t }));
 
-    // 1.3 Direito Administrativo (Casas 28 a 39)
-    const admTopicos = [
-      "Lei 8.112/1990: Formas de provimento e vacância",
-      "Lei 8.112/1990: Direitos, vantagens, deveres e proibições",
-      "Lei 8.112/1990: Regime disciplinar e penalidades",
-      "Lei 8.112/1990: Processo Administrativo Disciplinar (PAD)",
-      "Licitações (Lei 14.133/2021): Modalidades e critérios de julgamento",
-      "Licitações (Lei 14.133/2021): Contratação direta (dispensa e inexigibilidade)",
-      "Contratos Administrativos (Lei 14.133/2021): Formalização e rescisão",
-      "Improbidade (Lei 8.429/1992): Exigência de dolo específico e princípios",
-      "Improbidade (Lei 8.429/1992): Espécies de atos ímprobos e prescrição",
-      "Atos Administrativos: Requisitos de validade e atributos",
-      "Atos Administrativos: Convalidação, revogação e anulação",
-      "Responsabilidade Civil do Estado: Risco administrativo e regresso"
+    const dirConst = [
+      "Artigo 5º: Direitos e garantias fundamentais (I)", "Artigo 5º: Direitos individuais (II)",
+      "Remédios: Habeas Corpus e Mandado de Segurança", "Remédios: Mandado de Injunção e Habeas Data",
+      "Controle Difuso de Constitucionalidade", "Controle Concentrado: Legitimidade ADI/ADC/ADPF",
+      "Efeitos das Decisões no Controle Concentrado", "Poder Judiciário: Competências do STF",
+      "Poder Judiciário: Competências do STJ", "Tribunais de Justiça e Conselho Nacional de Justiça",
+      "Súmulas Vinculantes do STF", "Administração Pública Constitucional (art. 37)"
     ];
-    admTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Administrativo", i: "🏛️", t }));
+    dirConst.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Constitucional", i: "📜", t }));
 
-    // 1.4 Direito Processual Penal (Casas 40 a 51)
-    const procPenTopicos = [
-      "Prisão em Flagrante: Espécies, formalidades e audiência de custódia",
-      "Prisão Preventiva: Pressupostos, fundamentos e requisitos do CPP",
-      "Prisão Temporária (Lei 7.960/1989)",
-      "Medidas Cautelares Diversas da Prisão (art. 319 do CPP)",
-      "Inquérito Policial: Características, prazos e atuação do Ministério Público",
-      "Inquérito Policial: Arquivamento e Acordo de Não Persecução Penal (ANPP)",
-      "Provas: Teoria da prova ilícita e prova ilícita por derivação",
-      "Provas: Cadeia de custódia da prova pericial",
-      "Provas: Interceptação Telefônica (Lei 9.296/1996)",
-      "Tribunal do Júri: Procedimento bifásico e decisão de pronúncia",
-      "Recursos em Processo Penal: Apelação criminal",
-      "Recursos em Processo Penal: Recurso em Sentido Estrito (RESE)"
+    const dirAdm = [
+      "Lei 8.112/1990: Provimento e vacância", "Lei 8.112/1990: Direitos e deveres",
+      "Lei 8.112/1990: Regime disciplinar", "Lei 8.112/1990: Processo Administrativo Disciplinar",
+      "Licitações (Lei 14.133/2021): Modalidades e julgamento", "Licitações (Lei 14.133/2021): Dispensa e inexigibilidade",
+      "Contratos Administrativos (Lei 14.133/2021)", "Improbidade (Lei 8.429/1992): Dolo específico",
+      "Improbidade (Lei 8.429/1992): Espécies de atos e prescrição", "Atos Administrativos: Elementos e atributos",
+      "Atos Administrativos: Convalidação e anulação", "Responsabilidade Civil do Estado"
     ];
-    procPenTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Penal", i: "🔍", t }));
+    dirAdm.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Administrativo", i: "🏛️", t }));
 
-    // 1.5 Língua Portuguesa (Casas 52 a 65)
-    const ptTopicos = [
-      "Compreensão e Interpretação de Textos: Ideias gerais e inferências lógicas",
-      "Mecanismos de Coesão Textual: Coesão referencial e sequencial",
-      "Semântica e Significação Vocabular em Contexto",
-      "Sintaxe de Concordância Verbal",
-      "Sintaxe de Concordância Nominal",
-      "Regência Verbal: Principais verbos cobrados pelo Cebraspe",
-      "Regência Nominal e Emprego do Sinal Indicativo de Crase",
-      "Pontuação: Emprego da vírgula entre termos da oração",
-      "Pontuação: Vírgula entre orações coordenadas e subordinadas",
-      "Reescrita de Frases: Correção gramatical e manutenção de sentido",
-      "Colocação Pronominal: Próclise, mesóclise e ênclise",
-      "Morfologia: Conjunções coordenativas e subordinativas",
-      "Revisão Estratégica Cebraspe: Questões integradas da Zona Vermelha 1",
-      "Revisão Estratégica Cebraspe: Questões integradas da Zona Vermelha 2"
+    const procPen = [
+      "Prisão em Flagrante e custódia", "Prisão Preventiva no CPP", "Prisão Temporária (Lei 7.960/89)",
+      "Medidas Cautelares Alternativas (art. 319)", "Inquérito Policial e arquivamento",
+      "Acordo de Não Persecução Penal (ANPP)", "Provas: Teoria da prova ilícita", "Provas: Cadeia de custódia",
+      "Interceptação Telefônica (Lei 9.296/96)", "Tribunal do Júri: Decisão de pronúncia",
+      "Recursos Criminais: Apelação", "Recurso em Sentido Estrito (RESE)"
     ];
-    ptTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Português", i: "📖", t }));
+    procPen.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Processo Penal", i: "🔍", t }));
 
-    // 2. ZONA AMARELA (~23% da trilha: Casas 66 a 88)
-    // 2.1 Direito Penal (Casas 66 a 73)
-    const penTopicos = [
-      "Teoria do Crime: Conduta, resultado, tipicidade e nexo causal",
-      "Teoria do Crime: Dolo, culpa, consumação e tentativa",
-      "Teoria do Crime: Excludentes de ilicitude (art. 23 do CP)",
-      "Teoria do Crime: Culpabilidade e causas de exclusão",
-      "Aplicação da Pena: Critério trifásico e concurso de crimes",
-      "Crimes contra a Administração Pública: Peculato, concussão, corrupção e prevaricação",
-      "Crimes contra o Patrimônio: Furto, roubo e estelionato",
-      "Legislação Penal Especial: Drogas, Maria da Penha, Crimes Hediondos e Abuso de Autoridade"
+    const port = [
+      "Interpretação Textual e inferências", "Mecanismos de Coesão Referencial e Sequencial",
+      "Semântica e Significação Vocabular", "Concordância Verbal Cebraspe", "Concordância Nominal",
+      "Regência Verbal", "Regência Nominal e Crase", "Pontuação: Emprego da vírgula (termos)",
+      "Pontuação: Vírgula entre orações", "Reescrita de Frases: Sentido e gramática",
+      "Colocação Pronominal", "Morfologia: Conjunções",
+      "Revisão Integrada Cebraspe 1", "Revisão Integrada Cebraspe 2"
     ];
-    penTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Penal", i: "🎯", t }));
+    port.forEach(t => boardData.push({ id: boardData.length + 1, z: "vermelha", d: "Português", i: "📖", t }));
 
-    // 2.2 Direito Civil (Casas 74 a 81)
-    const civTopicos = [
-      "LINDB: Vigência e integração de leis e segurança jurídica pública (arts. 20 a 30)",
-      "Parte Geral: Personalidade, capacidade civil, prescrição e decadência",
-      "Obrigações: Inadimplemento, mora, juros, arras e cláusula penal",
-      "Teoria Geral dos Contratos e princípios contratuais",
-      "Direitos Reais: Posse, usucapião e garantias reais",
-      "Família e Sucessões: Regimes de bens e vocação hereditária",
-      "Código de Defesa do Consumidor: Responsabilidade civil e vício",
-      "Lei de Locações (Lei 8.245/1991): Ações locatícias e fiança"
+    // 2. ZONA AMARELA (66-88)
+    const penal = [
+      "Teoria do Crime: Conduta, resultado e tipicidade", "Teoria do Crime: Dolo, culpa e tentativa",
+      "Excludentes de Ilicitude (art. 23)", "Culpabilidade e causas de exclusão",
+      "Aplicação da Pena: Critério trifásico", "Crimes contra a Administração Pública",
+      "Crimes contra o Patrimônio", "Legislação Penal Especial (Drogas, Maria da Penha, Hediondos)"
     ];
-    civTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Civil", i: "🏢", t }));
+    penal.forEach(t => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Penal", i: "🎯", t }));
 
-    // 2.3 Legislação TJDFT (Casas 82 a 88)
-    const tjdftTopicos = [
-      "Regimento TJDFT: Composição e competência do Tribunal Pleno",
-      "Regimento TJDFT: Conselho da Magistratura e Câmaras Julgadoras",
-      "Lei 11.697/2008: Organização Judiciária do DF e competências cíveis",
-      "Lei 11.697/2008: Varas de Fazenda Pública, Criminais e Juizados",
-      "Provimento Geral da Corregedoria: Prazos e rotinas de mandados",
-      "Provimento do PJe: Regras e funcionamento do processo judicial eletrônico",
+    const civil = [
+      "LINDB e Parte Geral", "Personalidade, capacidade, prescrição e decadência",
+      "Obrigações: Inadimplemento e mora", "Teoria Geral dos Contratos",
+      "Direitos Reais: Posse e usucapião", "Família e Sucessões",
+      "Código de Defesa do Consumidor", "Lei de Locações (Lei 8.245/1991)"
+    ];
+    civil.forEach(t => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Direito Civil", i: "🏢", t }));
+
+    const tjdft = [
+      "Regimento TJDFT: Tribunal Pleno", "Regimento TJDFT: Conselho e Câmaras",
+      "Lei 11.697/2008: Organização Judiciária DF", "Lei 11.697/2008: Varas e Juizados",
+      "Provimento Geral da Corregedoria TJDFT", "Provimento do PJe no TJDFT",
       "Simulado da Legislação Específica TJDFT"
     ];
-    tjdftTopicos.forEach((t) => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Legislação TJDFT", i: "🏛️", t }));
+    tjdft.forEach(t => boardData.push({ id: boardData.length + 1, z: "amarela", d: "Legislação TJDFT", i: "🏛️", t }));
 
-    // 3. ZONA VERDE (~12% da trilha: Casas 89 a 100)
-    const verdeTopicos = [
-      { d: "Civil/Empresarial", i: "💼", t: "Direito de Empresa: Empresário individual, sociedade limitada e sócios" },
-      { d: "Leis Especiais", i: "📋", t: "Leis Civis Pontuais: Registros Públicos, Parcelamento do Solo e Direitos Autorais" },
-      { d: "Constitucional", i: "📘", t: "Teoria Constitucional: Conceitos conceituais puros e Poder Constituinte" },
-      { d: "Ética", i: "🛡️", t: "Ética no Setor Público: Conceitos filosóficos e Código de Ética do TJDFT" },
-      { d: "Processo", i: "📑", t: "Processo Penal e Civil Residual: Restauração de autos e incidentes de falsidade" },
-      { d: "Simulado 1", i: "⭐", t: "Revisão e Simulado Integrado da Zona Vermelha" },
-      { d: "Simulado 2", i: "⭐", t: "Revisão e Simulado Integrado da Zona Amarela" },
-      { d: "Jurisprudência", i: "💎", t: "Revisão Geral de Súmulas Vinculantes e Teses Repetitivas STF/STJ" },
-      { d: "Reta Final", i: "🔥", t: "Simulado Reta Final Cebraspe TJDFT (Parte 1)" },
-      { d: "Reta Final", i: "🔥", t: "Simulado Reta Final Cebraspe TJDFT (Parte 2)" },
-      { d: "Véspera", i: "🎯", t: "Revisão de Letra de Lei Seca e Pegadinhas Cebraspe" },
-      { d: "Casa da Posse", i: "👑", t: "CASA 100: Grande Simulado Final da Aprovação TJDFT!" }
+    // 3. ZONA VERDE (89-100)
+    const verde = [
+      { d: "Civil/Empresarial", i: "💼", t: "Direito de Empresa e Sociedades" },
+      { d: "Leis Especiais", i: "📋", t: "Registros Públicos e Parcelamento do Solo" },
+      { d: "Constitucional", i: "📘", t: "Teoria Constitucional e Poder Constituinte" },
+      { d: "Ética", i: "🛡️", t: "Ética Pública e Código de Ética do TJDFT" },
+      { d: "Processo", i: "📑", t: "Processos Incidentes e Restauração de Autos" },
+      { d: "Simulado 1", i: "⭐", t: "Simulado Integrado da Zona Vermelha" },
+      { d: "Simulado 2", i: "⭐", t: "Simulado Integrado da Zona Amarela" },
+      { d: "Jurisprudência", i: "💎", t: "Revisão Geral de Súmulas Vinculantes STF/STJ" },
+      { d: "Reta Final", i: "🔥", t: "Simulado Cebraspe TJDFT (Parte 1)" },
+      { d: "Reta Final", i: "🔥", t: "Simulado Cebraspe TJDFT (Parte 2)" },
+      { d: "Véspera", i: "🎯", t: "Revisão de Letra de Lei Seca" },
+      { d: "Casa da Posse", i: "👑", t: "CASA 100: Grande Simulado Final da Posse!" }
     ];
-    verdeTopicos.forEach((obj) => boardData.push({ id: boardData.length + 1, z: "verde", d: obj.d, i: obj.i, t: obj.t }));
+    verde.forEach(obj => boardData.push({ id: boardData.length + 1, z: "verde", d: obj.d, i: obj.i, t: obj.t }));
 
-    // Inicialização das questões provisórias
+    // Preenchimento provisório das questões
     boardData.forEach(item => {
       const qList = [];
       for (let q = 1; q <= 10; q++) {
         qList.push({
-          q: `Item ${q}: Questão temática sobre "${item.t}".\n(Aguardando importação do arquivo da casa ou upload JSON).`,
+          q: `Item ${q}: Questão sobre "${item.t}".\n(Aguardando carga da questão oficial via arquivo da casa ou JSON).`,
           a: "C",
-          exp: `Comentário da questão ${q} referente ao tema ${item.t}.`
+          exp: `Comentário da questão ${q} referente ao tópico ${item.t}.`
         });
       }
       item.questions = qList;
@@ -616,10 +639,41 @@
 
     const board = document.getElementById("board");
     const modal = document.getElementById("modal");
+    const modalErros = document.getElementById("modalErros");
     const modalPlan = document.getElementById("modalPlan");
     const bar = document.getElementById("bar");
     const txtCasas = document.getElementById("txtCasas");
     const txtPct = document.getElementById("txtPct");
+    const txtTotalErros = document.getElementById("txtTotalErros");
+
+    function getTileScoreClass(tileId) {
+      if (!concluidas.includes(tileId) || !userAnswers[tileId]) return "";
+      const tile = boardData.find(b => b.id === tileId);
+      if (!tile) return "";
+      let hits = 0;
+      let total = tile.questions.length;
+      for (let i = 0; i < total; i++) {
+        if (userAnswers[tileId][i] === tile.questions[i].a) hits++;
+      }
+      const pct = (hits / total) * 100;
+      if (pct >= 80) return "score-high";
+      if (pct >= 50) return "score-mid";
+      return "score-low";
+    }
+
+    function countTotalErrors() {
+      let count = 0;
+      boardData.forEach(item => {
+        if (userAnswers[item.id]) {
+          item.questions.forEach((q, idx) => {
+            const ans = userAnswers[item.id][idx];
+            if (ans && ans !== q.a) count++;
+          });
+        }
+      });
+      txtTotalErros.innerText = count;
+      return count;
+    }
 
     function render() {
       board.innerHTML = "";
@@ -627,8 +681,10 @@
         if (filtroAtual !== "todas" && item.z !== filtroAtual) return;
 
         const isDone = concluidas.includes(item.id);
+        const scoreClass = getTileScoreClass(item.id);
+
         const div = document.createElement("div");
-        div.className = `tile zona-${item.z} ${isDone ? "concluido" : ""}`;
+        div.className = `tile zona-${item.z} ${isDone ? "concluido" : ""} ${scoreClass}`;
         div.innerHTML = `
           <div class="tile-icon">${item.i}</div>
           <div class="tile-number">${item.id}</div>
@@ -647,6 +703,7 @@
       bar.style.width = pct + "%";
       txtCasas.innerText = `${done} / ${boardData.length} Casas`;
       txtPct.innerText = `${pct}% Concluído`;
+      countTotalErrors();
       localStorage.setItem("tjdft_concluidas", JSON.stringify(concluidas));
       localStorage.setItem("tjdft_respostas", JSON.stringify(userAnswers));
     }
@@ -682,6 +739,11 @@
       const badge = document.getElementById("modalBadge");
       badge.innerText = `Zona ${item.z}`;
       badge.className = `badge-zona b-${item.z}`;
+
+      // Configura os Links da Casa
+      const links = legalLinks[item.d] || legalLinks["default"];
+      document.getElementById("linkLeiSeca").href = links.lei;
+      document.getElementById("linkJuris").href = links.juris;
 
       const isDone = concluidas.includes(item.id);
       const btnAction = document.getElementById("btnAction");
@@ -742,7 +804,7 @@
       for (let i = 0; i < total; i++) {
         if (userAnswers[currentTile.id][i] === currentTile.questions[i].a) hits++;
       }
-      document.getElementById("scoreText").innerText = `Desempenho: ${hits}/${total} Acertos`;
+      document.getElementById("scoreText").innerText = `Desempenho: ${hits}/${total} Acertos (${Math.round((hits/total)*100)}%)`;
     }
 
     document.getElementById("btnCerto").onclick = () => answer("C");
@@ -776,7 +838,42 @@
     document.getElementById("btnPlano").onclick = () => modalPlan.style.display = "flex";
     document.getElementById("btnClosePlan").onclick = () => modalPlan.style.display = "none";
 
-    // Backup em JSON
+    // Caderno de Erros
+    document.getElementById("btnCadernoErros").onclick = () => {
+      const lista = document.getElementById("listaErros");
+      lista.innerHTML = "";
+      let found = false;
+
+      boardData.forEach(item => {
+        if (userAnswers[item.id]) {
+          item.questions.forEach((q, idx) => {
+            const ans = userAnswers[item.id][idx];
+            if (ans && ans !== q.a) {
+              found = true;
+              const box = document.createElement("div");
+              box.className = "error-item";
+              box.innerHTML = `
+                <div class="error-item-tag">Casa ${item.id} • ${item.d} • Questão ${idx + 1}</div>
+                <div style="margin-bottom:6px; white-space:pre-line;">${q.q}</div>
+                <div style="font-size:0.75rem; color:#f87171;"><strong>Sua Resposta:</strong> ${ans === "C" ? "CERTO" : "ERRADO"} | <strong>Gabarito:</strong> ${q.a === "C" ? "CERTO" : "ERRADO"}</div>
+                <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">${q.exp}</div>
+              `;
+              lista.appendChild(box);
+            }
+          });
+        }
+      });
+
+      if (!found) {
+        lista.innerHTML = "<p style='color:#10b981; font-size:0.85rem;'>Parabéns! Nenhum erro registrado até o momento.</p>";
+      }
+
+      modalErros.style.display = "flex";
+    };
+
+    document.getElementById("btnCloseErros").onclick = () => modalErros.style.display = "none";
+
+    // Backup & Upload
     document.getElementById("btnSalvar").onclick = () => {
       const data = { done: concluidas, answers: userAnswers };
       const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
@@ -786,7 +883,6 @@
       a.click();
     };
 
-    // Upload Dinâmico de Questões ou Backup
     document.getElementById("btnCarregar").onclick = () => document.getElementById("inputUpload").click();
 
     document.getElementById("inputUpload").onchange = (e) => {
@@ -796,8 +892,6 @@
       reader.onload = (evt) => {
         try {
           const res = JSON.parse(evt.target.result);
-
-          // Upload de questões de uma casa específica
           if (res.id && res.questions) {
             const tile = boardData.find(c => c.id === res.id);
             if (tile) {
@@ -808,12 +902,10 @@
               return;
             }
           }
-
-          // Upload de backup de respostas
           concluidas = res.done || [];
           userAnswers = res.answers || {};
           render();
-          alert("Backup restaurado com sucesso!");
+          alert("Backup restaurado!");
         } catch {
           alert("Arquivo JSON inválido!");
         }
@@ -822,7 +914,7 @@
     };
 
     document.getElementById("btnResetar").onclick = () => {
-      if (confirm("Zerar todas as casas e histórico de respostas?")) {
+      if (confirm("Zerar todas as casas e histórico de erros/respostas?")) {
         concluidas = [];
         userAnswers = {};
         render();
